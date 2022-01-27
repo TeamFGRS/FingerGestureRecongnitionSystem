@@ -1,4 +1,5 @@
 from Sensor_Data_Reader import *
+from Feature_Extraction import *
 
 # finger up file
 fingerUp = read_file('../DataSet/Finger_up.csv')
