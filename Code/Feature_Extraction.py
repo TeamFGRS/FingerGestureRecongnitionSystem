@@ -1,82 +1,77 @@
+import csv
+
 import pandas as pd
-
 import numpy as np
-
 import seaborn as sns
 
 from statsmodels.tsa.stattools import acovf
 
-from Sensor_Data_Reader import *
 
-#finger up file
-fingerUp=read_file('../DataSet/Finger_up.csv')
+def feature_extraction(data_file, test_type, ring_number):
+    # TODO:min, max, mean skewness, kurtosis, variance, autocovariance(?)
 
-#finger down
-fingerDown=read_file('../DataSet/Finger_down.csv')
+    # for TEST in data_file['TEST'].unique():
+    #     locals()['data_file_' + TEST] = data_file[(data_file.TEST == TEST)]
+    #     print(locals()['data_file_' + TEST])
 
-#finger left
-fingerLeft=read_file('../DataSet/Finger_Left.csv')
+    features = pd.DataFrame(data_file)
+    grouped = features.groupby(features["TEST"])
 
-#finger right
-fingerRight=read_file('../DataSet/Finger_right.csv')
+    # test_column = grouped.head()
+    # print("Start Test")
+    # print(grouped.get_group("5"))
+    # print("End Test")
 
-#90 deg clock
-fingerClock=read_file('../DataSet/90deg_clockwise.csv')
-
-#90 deg counter
-fingerCounter=read_file('../DataSet/90deg_counter_clockwise.csv')
-
-
-pd.to_csv('../DataSet/Feature_Extracted_Data.csv')
-read_file(d_file)[‘A’].mean()
-
-data[‘A’].var()
-
-data[‘A’].skew()
-
-sns.distplot(data[‘A’],hist=True,kde=True)
-
-statsmodels.tsa.stattools.acovf(x, adjusted=False, demean=True, fft=True, missing='none', nlag=None)
-#where x is the time series data.
-
-"""
-import numpy as np
-import pandas as pd
-from statsmodels.tsa.stattools import acovf
+    # feature_file = open('../DataSet/extracted_features.csv', 'w')
+    # writer = csv.writer(feature_file)
 
 
-def extract_features(df, autocovar_num, dft_amplitudes_num):
-    features = pd.DataFrame(columns=df.columns, dtype=np.float64)
+    for group in range(grouped.ngroups - 1):
+        df = grouped.get_group(str(group + 1)).drop(columns="TEST")
+        kurt = df.kurt().to_frame().transpose()
 
-    def add_2_features(index, df):
-        def order_by_column(series):
-            return series[features.columns].values
 
-        features.loc[index, :] = order_by_column(df)
 
-    # TODO: DRY with add_dft_amplitudes_of_df_2_features
-    def add_autocovariance_of_df_2_features():
-        def autocovariance_of_df(lag):
-            return df.apply(lambda col: acovf(col)[lag], axis='index')
+        # kurt_values = kurt.iloc[0:, :]
+        # header = ["ACC-X", "ACC-Y", "ACC-Z", "GYRO-X", "GYRO-Y", "GYRO-Z"]
+        #kurt.DictWriter()
+        kurt.to_csv('../DataSet/extracted_features.csv', mode='a', index=False, header=False)
+        #file_test.to_csv('../DataSet/extracted_features_trial.csv',mode='a', header=["ACC-X", "ACC-Y", "ACC-Z", "GYRO-X", "GYRO-Y", "GYRO-Z"], index=False)
 
-        for lag in range(1, autocovar_num + 1):
-            add_2_features('autocovar_lag_' + str(lag), autocovariance_of_df(lag=lag))
+        # print(kurt)
+        # writer.writerow([kurt])
 
-    def add_dft_amplitudes_of_df_2_features():
-        def dft_amplitudes_of_df(num):
-            # FIXME: FFT ist hier falsch eingesetzt, da SVC schlechter geworden ist.
-            return df.apply(lambda col: np.abs(np.fft.fft(col))[num], axis='index')
+        # print(df.kurtosis())
 
-        for num in range(1, dft_amplitudes_num + 1):
-            add_2_features('dft_amplitude_' + str(num), dft_amplitudes_of_df(num - 1))
+    # feature_file.close()
 
-    add_2_features('min', df.min())
-    add_2_features('max', df.max())
-    add_2_features('mean', df.mean())
-    add_2_features('var', df.var(ddof=0))
-    add_2_features('skew', df.skew())
-    add_2_features('kurtosis', df.kurtosis())
-    add_autocovariance_of_df_2_features()
-    add_dft_amplitudes_of_df_2_features()
-    return features
-"""
+    return 1
+
+    # grouped = data_file.groupby(data_file.TEST)
+    # print(grouped.ngroups)
+    # df5 = grouped.get_group("2000")
+    # print(df5)
+
+    # for value in test_num:
+    #     if str(value) == str(test_num):
+    #         separate_test_instances = pd.DataFrame(columns=data_file.columns, dtype=np.float64)
+    #         print(separate_test_instances)
+
+    # #create data structure
+    # features = pd.DataFrame(columns=data_file.columns, dtype=np.float64)
+    #
+    # def append_features(label, data_file):
+    #     def ordering(col_values):
+    #         return col_values[features.columns].values
+    #
+    #     #check label and store associated values
+    #     features.loc[label, :] = ordering(data_file)
+    #
+    # append_features('min', data_file.min())
+    # append_features('max', data_file.max())
+    # append_features('mean', data_file.mean())
+    # append_features('var', data_file.var(ddof=0))
+    # append_features('skew', data_file.skew())
+    # append_features('kurtosis', data_file.kurtosis())
+    #
+    # return features

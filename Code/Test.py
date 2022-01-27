@@ -1,24 +1,18 @@
-
 from Sensor_Data_Reader import *
 
-#finger up file
-read_file('../DataSet/Finger_up.csv')
+# finger up file
+fingerUp = read_file('../DataSet/Finger_up.csv')
+# finger down
+fingerDown = read_file('../DataSet/Finger_down.csv')
+# finger left
+fingerLeft = read_file('../DataSet/Finger_Left.csv')
+# finger right
+fingerRight = read_file('../DataSet/Finger_right.csv')
+# 90 deg clock
+fingerClock = read_file('../DataSet/90deg_clockwise.csv')
+# 90 deg counter
+fingerCounter = read_file('../DataSet/90deg_counter_clockwise.csv')
+# extracted features
+# extractedFeatures = read_file('../DataSet/extracted_features.csv')
 
-#finger down
-read_file('../DataSet/Finger_down.csv')
-
-#finger left
-read_file('../DataSet/Finger_Left.csv')
-
-#finger right
-read_file('../DataSet/Finger_right.csv')
-
-#90 deg clock
-read_file('../DataSet/90deg_clockwise.csv')
-
-#90 deg counter
-read_file('../DataSet/90deg_counter_clockwise.csv')
-
-
-
-
+feature_extraction(fingerUp, "up", "ring1")
