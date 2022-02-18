@@ -13,7 +13,7 @@ print("X: "+str(X))
 y = pd.read_csv('../DataSet/extracted_features.csv', usecols=['GESTURE'])
 print("y: "+str(y))
 
-Z = pd.read_csv('../DataSet/testing_features.csv').drop("GESTURE", axis=1)
+Z = pd.read_csv('../DataSet/demo_features.csv').drop("GESTURE", axis=1)
 
 # Split into training and test set
 X_train, X_test, y_train, y_test = train_test_split(
