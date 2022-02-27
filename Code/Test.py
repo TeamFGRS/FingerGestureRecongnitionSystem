@@ -4,19 +4,20 @@ from Data_Frame_Merging import *
 from DF_to_CSV import *
 
 # finger up file
-fingerUp = read_file('../DataSet/Finger_up.csv')
+fingerUp = read_file('../DataSet/up_gesture.csv')
 # finger down
-fingerDown = read_file('../DataSet/Finger_down.csv')
+fingerDown = read_file('../DataSet/down_gesture.csv')
 # finger left
-fingerLeft = read_file('../DataSet/Finger_Left.csv')
+fingerLeft = read_file('../DataSet/left_gesture.csv')
 # finger right
-fingerRight = read_file('../DataSet/Finger_right.csv')
+fingerRight = read_file('../DataSet/right_gesture.csv')
 # 90 deg clock
-fingerClock = read_file('../DataSet/90deg_clockwise.csv')
+fingerClock = read_file('../DataSet/clock_gesture.csv')
 # 90 deg counter
-fingerCounter = read_file('../DataSet/90deg_counter_clockwise.csv')
+fingerCounter = read_file('../DataSet/counter_gesture.csv')
 # extracted features
 # extractedFeatures = read_file('../DataSet/extracted_features.csv')
+
 
 up_df = feature_extraction(fingerUp, "up", "ring1")
 down_df = feature_extraction(fingerDown, "down", "ring1")

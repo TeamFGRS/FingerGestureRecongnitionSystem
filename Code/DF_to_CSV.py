@@ -3,7 +3,7 @@ import os
 
 
 def df_to_csv(df):
-    path_file = "../DataSet/extracted_features.csv"
+    path_file = "../DataSet/testing_features.csv"
 
     if not os.path.isfile(path_file):
         df.to_csv(path_file, index=False, header=True)
