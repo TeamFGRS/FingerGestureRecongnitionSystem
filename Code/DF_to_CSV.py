@@ -2,8 +2,8 @@ import pandas as pd
 import os
 
 
-def df_to_csv(df):
-    path_file = "../DataSet/testing_features.csv"
+def df_to_csv(df, path):
+    path_file = path
 
     if not os.path.isfile(path_file):
         df.to_csv(path_file, index=False, header=True)

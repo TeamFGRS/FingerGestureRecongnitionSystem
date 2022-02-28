@@ -1,11 +1,10 @@
 import pandas as pd
 
 
-def feature_extraction(data_file, test_type, ring_number):
+def feature_extraction(data_frame, test_type, ring_number):
     # TODO: autocovariance(?), maybe fix warnings
 
-    features = pd.DataFrame(data_file)
-    grouped = features.groupby(features["TEST"])
+    grouped = data_frame.groupby(data_frame["TEST"])
 
     def minimum(data_group):
         min_df = data_group.min().to_frame().transpose()
