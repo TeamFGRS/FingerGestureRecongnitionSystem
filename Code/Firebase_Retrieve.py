@@ -7,7 +7,7 @@ from KNN_Predict import *
 import pandas as pd
 
 
-# predictor = KNN_train()
+predictor = KNN_train()
 
 # Connect to Firebase
 cred = credentials.Certificate(
@@ -54,10 +54,10 @@ def listener(event):
         del event.data[0]
         df['GYRO-Z'] = event.data
         print(df)
-        fe = RT_FE(df, "WTV", "RING2")
+        fe = RT_FE(df, "WTV", "ring1")
         print("FEATURE EXTRACTION: ")
         print(fe)
-        # KNN_predict(predictor, fe)
+        KNN_predict(predictor, fe)
 
     else:
         print("OH OH SMTH WRONG HAPPENED WOOPSIES: ", str(event.path), " :", str(event.data))
