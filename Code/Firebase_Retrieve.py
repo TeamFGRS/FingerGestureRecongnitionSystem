@@ -5,7 +5,7 @@ from Real_Time_FE import *
 from KNN_Train import *
 from KNN_Predict import *
 import pandas as pd
-
+import threading
 
 predictor = KNN_train()
 
@@ -17,53 +17,125 @@ default_app = firebase_admin.initialize_app(cred, {
     'databaseURL': "https://fingergesturerecognitionsystem-default-rtdb.firebaseio.com/"
 })
 
-headers = ['ACC-X', 'ACC-Y', 'ACC-Z', 'GYRO-X', 'GYRO-Y', 'GYRO-Z', 'TEST']
+headers = ['ACC-X-Ring1', 'ACC-Y-Ring1', 'ACC-Z-Ring1', 'GYRO-X-Ring1', 'GYRO-Y-Ring1', 'GYRO-Z-Ring1', 'ACC-X-Ring2',
+           'ACC-Y-Ring2', 'ACC-Z-Ring2', 'GYRO-X-Ring2', 'GYRO-Y-Ring2', 'GYRO-Z-Ring2', 'TEST']
 df = pd.DataFrame(columns=headers)
+
+lock = threading.Lock()
+detectionCounter = 0
+
+
+def update_counter():
+    global detectionCounter
+    lock.acquire()
+    detectionCounter += 1
+    lock.release()
+
+
+def reset_counter():
+    global detectionCounter
+    lock.acquire()
+    detectionCounter = 0
+    lock.release()
 
 
 def listener(event):
     if event.path == "/":
         print("SKIP")
 
-    elif event.path == "/TEST":
+    elif event.path == "/Ring1/TEST":
         del event.data[0]
         # df.insert(0, "TEST", event.data)
         df['TEST'] = event.data
 
-    elif event.path == "/ACC-X":
+    elif event.path == "/Ring2/TEST":
         del event.data[0]
-        df['ACC-X'] = event.data
+        df['TEST'] = event.data
 
-    elif event.path == "/ACC-Y":
+    elif event.path == "/Ring1/ACC-X":
         del event.data[0]
-        df['ACC-Y'] = event.data
+        df['ACC-X-Ring1'] = event.data
+        update_counter()
 
-    elif event.path == "/ACC-Z":
+    elif event.path == "/Ring2/ACC-X":
         del event.data[0]
-        df['ACC-Z'] = event.data
+        df['ACC-X-Ring2'] = event.data
+        update_counter()
 
-    elif event.path == "/GYRO-X":
+    elif event.path == "/Ring1/ACC-Y":
         del event.data[0]
-        df['GYRO-X'] = event.data
+        df['ACC-Y-Ring1'] = event.data
+        update_counter()
 
-    elif event.path == "/GYRO-Y":
+    elif event.path == "/Ring2/ACC-Y":
         del event.data[0]
-        df['GYRO-Y'] = event.data
+        df['ACC-Y-Ring2'] = event.data
+        update_counter()
 
-    elif event.path == "/GYRO-Z":
+    elif event.path == "/Ring1/ACC-Z":
         del event.data[0]
-        df['GYRO-Z'] = event.data
-        print(df)
-        fe = RT_FE(df, "WTV", "ring1")
-        print("FEATURE EXTRACTION: ")
-        print(fe)
-        KNN_predict(predictor, fe)
+        df['ACC-Z-Ring1'] = event.data
+        update_counter()
+
+    elif event.path == "/Ring2/ACC-Z":
+        del event.data[0]
+        df['ACC-Z-Ring2'] = event.data
+        update_counter()
+
+    elif event.path == "/Ring1/GYRO-X":
+        del event.data[0]
+        df['GYRO-X-Ring1'] = event.data
+        update_counter()
+
+    elif event.path == "/Ring2/GYRO-X":
+        del event.data[0]
+        df['GYRO-X-Ring2'] = event.data
+        update_counter()
+
+    elif event.path == "/Ring1/GYRO-Y":
+        del event.data[0]
+        df['GYRO-Y-Ring1'] = event.data
+        update_counter()
+
+    elif event.path == "/Ring2/GYRO-Y":
+        del event.data[0]
+        df['GYRO-Y-Ring2'] = event.data
+        update_counter()
+
+    elif event.path == "/Ring1/GYRO-Z":
+        del event.data[0]
+        df['GYRO-Z-Ring1'] = event.data
+        update_counter()
+        print("Check at GYRO-Z RING1: ", str(detectionCounter))
+        if detectionCounter == 12:
+            print(df)
+            reset_counter()
+            print("Check reset at GYRO-Z RING1: ", str(detectionCounter))
+            fe = RT_FE(df)
+            print("FEATURE EXTRACTION: ")
+            print(fe)
+            # KNN_predict(predictor, fe)
+
+    elif event.path == "/Ring2/GYRO-Z":
+        del event.data[0]
+        df['GYRO-Z-Ring2'] = event.data
+        update_counter()
+        print("Check at GYRO-Z RING2: ", str(detectionCounter))
+        if detectionCounter == 12:
+            print(df)
+            reset_counter()
+            print("Check reset at GYRO-Z RING2: ", str(detectionCounter))
+            fe = RT_FE(df)
+            print("FEATURE EXTRACTION: ")
+            print(fe)
+            # KNN_predict(predictor, fe)
 
     else:
-        print("OH OH SMTH WRONG HAPPENED WOOPSIES: ", str(event.path), " :", str(event.data))
+        print("OTHER: ", str(event.path), " :", str(event.data))
 
 
-ring2 = firebase_admin.db.reference('Ring2').listen(listener)
+ring1 = firebase_admin.db.reference('/').listen(listener)
+
 # print("LIST")
 # print(*gyroX)
 # print("END OF LIST")

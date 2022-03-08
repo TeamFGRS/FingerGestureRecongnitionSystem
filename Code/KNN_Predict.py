@@ -5,7 +5,7 @@ from sklearn.model_selection import GridSearchCV
 
 
 def KNN_predict(predictor, df):
-    Z = df.drop(columns='GESTURE')
+    # Z = df.drop(columns='GESTURE')
 
     print("Best predictions Grid search:")
-    print(predictor.predict(Z))
+    print(predictor.predict(df))
