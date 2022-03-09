@@ -6,8 +6,7 @@ from OpenGL.GLU import *
 
 # in a cube, we have 12 conxns between the nodes(/corners)
 # node = vertex
-change = True
-#changeCb= False
+changeCount = 0
 
 # a cube has 8 verticies
 verticies_cube = (
@@ -133,7 +132,7 @@ def Triangle():
 
 
 def main():
-    global change
+    global changeCount
     pygame.init()  # pygame initialization
     display = (800, 600)
     screen = pygame.display.set_mode(display, DOUBLEBUF | OPENGL)  # we have to tell pygame we r using opengl
@@ -173,7 +172,7 @@ def main():
                 if event.key == pygame.K_a:  # rotate around all axis
                     glRotatef(25, 1, 1, 1)  # (degree,x,y,z)
                 if event.key == pygame.K_c:
-                    change = False
+                    changeCount =changeCount + 1
 
 
 
@@ -192,12 +191,13 @@ def main():
         # Background
         # pygame.display.flip()
         # screen.blit(background, (0, 0))  # 0,0 are the coorrdinates of the image ie where we want it to disappear
-        #Cube()
 
-        if change:
-            Cube()
-        else:
+
+        if changeCount % 2 != 0:
             Triangle()
+        elif changeCount %2 == 0:
+            Cube()
+
 
 
         '''
