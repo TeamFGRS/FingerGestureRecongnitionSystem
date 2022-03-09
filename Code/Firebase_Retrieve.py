@@ -5,9 +5,12 @@ from Real_Time_FE import *
 from KNN_Train import *
 from KNN_Predict import *
 import pandas as pd
+#from threading import Thread
+import time
+import threading
 
-
-# predictor = KNN_train()
+start = time.perf_counter()
+predictor = KNN_train()
 
 # Connect to Firebase
 cred = credentials.Certificate(
@@ -20,6 +23,8 @@ default_app = firebase_admin.initialize_app(cred, {
 headers = ['ACC-X', 'ACC-Y', 'ACC-Z', 'GYRO-X', 'GYRO-Y', 'GYRO-Z', 'TEST']
 df = pd.DataFrame(columns=headers)
 
+#t1 = threading.Thread(target=RT_FE)
+#t2 = threading.Thread(target=KNN_predict)
 
 def listener(event):
     if event.path == "/":
@@ -54,16 +59,29 @@ def listener(event):
         del event.data[0]
         df['GYRO-Z'] = event.data
         print(df)
-        fe = RT_FE(df, "WTV", "RING2")
+        fe = RT_FE(df, "WTV", "ring1")
         print("FEATURE EXTRACTION: ")
         print(fe)
-        # KNN_predict(predictor, fe)
+
+       # KNN_predict(predictor, fe)
+       # t1.start()
+       # t2.start()
+
+       # t1.join()
+        #t2.join()
+
+        finish = time.perf_counter()
+        print(f'Finished in {round(finish-start, 2)} second')
 
     else:
         print("OH OH SMTH WRONG HAPPENED WOOPSIES: ", str(event.path), " :", str(event.data))
 
 
 ring2 = firebase_admin.db.reference('Ring2').listen(listener)
+
+
+
+
 # print("LIST")
 # print(*gyroX)
 # print("END OF LIST")
