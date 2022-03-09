@@ -7,6 +7,7 @@ from OpenGL.GLU import *
 # in a cube, we have 12 conxns between the nodes(/corners)
 # node = vertex
 change = True
+count=0
 #changeCb= False
 
 # a cube has 8 verticies
@@ -134,6 +135,7 @@ def Triangle():
 
 def main():
     global change
+    global count
     pygame.init()  # pygame initialization
     display = (800, 600)
     screen = pygame.display.set_mode(display, DOUBLEBUF | OPENGL)  # we have to tell pygame we r using opengl
@@ -174,6 +176,7 @@ def main():
                     glRotatef(25, 1, 1, 1)  # (degree,x,y,z)
                 if event.key == pygame.K_c:
                     change = False
+                    count = count + 1
 
 
 
@@ -196,8 +199,15 @@ def main():
 
         if change:
             Cube()
-        else:
+        elif not change & count!=0:
             Triangle()
+            count=count-1
+        elif count==0:
+            Cube()
+
+
+
+
 
 
         '''
