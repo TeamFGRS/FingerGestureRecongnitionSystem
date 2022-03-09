@@ -135,7 +135,7 @@ def main():
     screen = pygame.display.set_mode(display, DOUBLEBUF | OPENGL)#we have to tell pygame we r using opengl
 
     #Background
-    background = pygame.image.load('panda.png')
+   # background = pygame.image.load('panda.png')
 
     gluPerspective(45, (display[0]/display[1]),0.1, 50.0)#(field of view, aspect ratio=width/height, clipping planes = plane tht clips away showimng the object ie when u zoom out a lot it's going to disapear, 0,1 then 50 is pretty wide)
 
@@ -187,9 +187,9 @@ def main():
 
         # Background
         #pygame.display.flip()
-        screen.blit(background, (0, 0))  # 0,0 are the coorrdinates of the image ie where we want it to disappear
+        #screen.blit(background, (0, 0))  # 0,0 are the coorrdinates of the image ie where we want it to disappear
         Cube()
-        Triangle()
+        #Triangle()
         pygame.display.flip()#an alternative could be display.update()
         pygame.time.wait(10)#in ms
 
