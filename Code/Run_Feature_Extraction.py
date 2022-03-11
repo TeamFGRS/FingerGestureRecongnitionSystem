@@ -1,7 +1,7 @@
 import pandas as pd
 
 from Sensor_Data_Reader import *
-from Feature_Extraction import *
+from DS_Feature_Extraction import *
 from Data_Frame_Merging import *
 from DF_to_CSV import *
 

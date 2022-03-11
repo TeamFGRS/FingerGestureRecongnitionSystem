@@ -88,6 +88,4 @@ def RT_FE(grouped):
 
     c_df = min_df().join(max_df()).join(mean_df()).join(variance_df()).join(skewness_df()).join(kurtosis_df())
 
-    # print(c_df)
-
     return c_df
