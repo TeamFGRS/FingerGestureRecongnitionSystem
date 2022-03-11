@@ -37,6 +37,21 @@ def reset_counter():
     detectionCounter = 0
     lock.release()
 
+def updateTest1(test):
+    global test1
+    lock.acquire()
+    test1 = test
+    print("TEST1", str(test1))
+    lock.release()
+
+
+def updateTest2(test):
+    global test2
+    lock.acquire()
+    test2 = test
+    print("TEST2", str(test2))
+    lock.release()
+
 
 def listener(event):
     if event.path == "/":
@@ -44,12 +59,15 @@ def listener(event):
 
     elif event.path == "/Ring1/TEST":
         del event.data[0]
-        # df.insert(0, "TEST", event.data)
         df['TEST'] = event.data
+        list = event.data
+        updateTest1(list[2])
 
     elif event.path == "/Ring2/TEST":
         del event.data[0]
         df['TEST'] = event.data
+        list = event.data
+        updateTest2(list[2])
 
     elif event.path == "/Ring1/ACC-X":
         del event.data[0]
@@ -106,7 +124,7 @@ def listener(event):
         df['GYRO-Z-Ring1'] = event.data
         update_counter()
         print("Check at GYRO-Z RING1: ", str(detectionCounter))
-        if detectionCounter == 12:
+        if detectionCounter == 12 and test1 == test2:
             print(df)
             reset_counter()
             print("Check reset at GYRO-Z RING1: ", str(detectionCounter))
@@ -120,7 +138,7 @@ def listener(event):
         df['GYRO-Z-Ring2'] = event.data
         update_counter()
         print("Check at GYRO-Z RING2: ", str(detectionCounter))
-        if detectionCounter == 12:
+        if detectionCounter == 12 and test1 == test2:
             print(df)
             reset_counter()
             print("Check reset at GYRO-Z RING2: ", str(detectionCounter))
