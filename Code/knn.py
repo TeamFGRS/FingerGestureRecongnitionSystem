@@ -1,19 +1,17 @@
 import pandas as pd
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import train_test_split
-from sklearn.model_selection  import GridSearchCV
-from sklearn.datasets import load_iris
-
+from sklearn.model_selection import GridSearchCV
 
 # Loading data
 
 # Create feature and target arrays
-X = pd.read_csv('../DataSet/extracted_features.csv').drop("GESTURE", axis=1)
-print("X: "+str(X))
-y = pd.read_csv('../DataSet/extracted_features.csv', usecols=['GESTURE'])
-print("y: "+str(y))
+X = pd.read_csv('../DataSet2/extracted_features.csv').drop("GESTURE", axis=1)
+# print("X: " + str(X))
+y = pd.read_csv('../DataSet2/extracted_features.csv', usecols=['GESTURE'])
+# print("y: " + str(y))
 
-Z = pd.read_csv('../DataSet/demo_features.csv').drop("GESTURE", axis=1)
+# Z = pd.read_csv('../DataSet/demo_features.csv').drop("GESTURE", axis=1)
 
 # Split into training and test set
 X_train, X_test, y_train, y_test = train_test_split(
@@ -21,23 +19,23 @@ X_train, X_test, y_train, y_test = train_test_split(
 
 knn = KNeighborsClassifier(n_neighbors=3)
 
-parameters = {'n_neighbors' : [5, 6, 7],
+parameters = {'n_neighbors': [5, 6, 7],
               'weights': ['uniform', 'distance'],
               'p': [1, 2]}
 
 grid_obj = GridSearchCV(knn, param_grid=parameters,
                         verbose=1, cv=3, n_jobs=-1)
 
-#knn.fit(X_train, y_train.values.ravel())
+# knn.fit(X_train, y_train.values.ravel())
 
 grid_fit = grid_obj.fit(X_train, y_train.values.ravel())
 best_knn = grid_fit.best_estimator_
 predictions = (knn.fit(X_train, y_train.values.ravel())).predict(X_test)
 best_prediction = best_knn.predict(X_test)
 # Predict on dataset which model has not seen before
-#print(knn.predict(X_test))
+# print(knn.predict(X_test))
 
-#print(knn.score(X_test, y_test))
+# print(knn.score(X_test, y_test))
 
 print("Training Score:")
 score = grid_fit.best_score_
@@ -53,5 +51,5 @@ print(str(score_percent) + "%")
 # print(best_prediction)
 # print("Z predictions knn:")
 # print(knn.predict(Z))
-print("Best predictions Grid search:")
-print(best_knn.predict(Z))
+# print("Best predictions Grid search:")
+# print(best_knn.predict(Z))
