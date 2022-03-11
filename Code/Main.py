@@ -2,8 +2,7 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import db
 from Real_Time_FE import *
-from KNN_Train import *
-from KNN_Predict import *
+from KNN_TP import *
 import pandas as pd
 import threading
 
@@ -114,7 +113,7 @@ def listener(event):
             fe = RT_FE(df)
             print("FEATURE EXTRACTION: ")
             print(fe)
-            # KNN_predict(predictor, fe)
+            KNN_predict(predictor, fe)
 
     elif event.path == "/Ring2/GYRO-Z":
         del event.data[0]
@@ -128,25 +127,14 @@ def listener(event):
             fe = RT_FE(df)
             print("FEATURE EXTRACTION: ")
             print(fe)
-            # KNN_predict(predictor, fe)
+            KNN_predict(predictor, fe)
 
     else:
         print("OTHER: ", str(event.path), " :", str(event.data))
+        if detectionCounter != 0:
+            print("Counter at OTHER: ", str(detectionCounter))
+            reset_counter()
+            print("Check reset at OTHER: ", str(detectionCounter))
 
 
 ring1 = firebase_admin.db.reference('/').listen(listener)
-
-# print("LIST")
-# print(*gyroX)
-# print("END OF LIST")
-# gyroX.clear()
-
-# # PUT IN DATAFRAME
-# df = pd.DataFrame.from_dict(data, orient='index')
-# #df_grouped = df.groupby(df.index)
-# df_grouped=df.groupby(df.index).apply(print)
-
-# def listener(event):
-#     # print(event.event_type)  # can be 'put' or 'patch'
-#     # print(event.path)  # relative to the reference, it seems
-#     print(event.data)  # new data at /reference/event.path. None if deleted

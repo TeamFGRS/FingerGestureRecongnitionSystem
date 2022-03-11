@@ -6,10 +6,8 @@ from sklearn.model_selection import GridSearchCV
 
 def KNN_train():
     # Create feature and target arrays
-    X = pd.read_csv('../DataSet/extracted_features.csv').drop("GESTURE", axis=1)
-    # print("X: " + str(X))
-    y = pd.read_csv('../DataSet/extracted_features.csv', usecols=['GESTURE'])
-    # print("y: " + str(y))
+    X = pd.read_csv('../DataSet2/extracted_features.csv').drop("GESTURE", axis=1)
+    y = pd.read_csv('../DataSet2/extracted_features.csv', usecols=['GESTURE'])
 
     # Split into training and test set
     X_train, X_test, y_train, y_test = train_test_split(
@@ -32,3 +30,10 @@ def KNN_train():
     print("Training Score: ", str(score_percent) + "%")
 
     return best_knn
+
+
+def KNN_predict(predictor, df):
+    # Z = df.drop(columns='GESTURE')
+
+    print("Best predictions Grid search:")
+    print(predictor.predict(df))

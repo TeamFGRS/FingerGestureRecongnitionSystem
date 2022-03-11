@@ -2,7 +2,6 @@ import pandas as pd
 
 
 def feature_extraction(data_frame, test_type):
-    # TODO: autocovariance(?), maybe fix warnings
 
     grouped = data_frame.groupby(data_frame["TEST"])
 
