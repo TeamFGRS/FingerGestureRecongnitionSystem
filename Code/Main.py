@@ -22,6 +22,8 @@ df = pd.DataFrame(columns=headers)
 
 lock = threading.Lock()
 detectionCounter = 0
+test1 = 0
+test2 = 0
 
 
 def update_counter():

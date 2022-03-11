@@ -68,10 +68,14 @@ def listener(event):
     elif event.path == "/Ring1/TEST":
         test = [testCounter] * 20
         df['TEST'] = test
+        list = event.data
+        updateTest1(list[2])
 
     elif event.path == "/Ring2/TEST":
         test = [testCounter] * 20
         df['TEST'] = test
+        list = event.data
+        updateTest2(list[2])
 
     elif event.path == "/Ring1/ACC-X":
         del event.data[0]
@@ -140,7 +144,7 @@ def listener(event):
         update_counter()
 
         print("Check at GYRO-Z RING1: ", str(detectionCounter))
-        if detectionCounter == 12:
+        if detectionCounter == 12 and test1 == test2:
             print(df)
             df_to_csv(df, "../DataSet2/test.csv")
             reset_counter()
@@ -154,7 +158,7 @@ def listener(event):
 
         update_counter()
         print("Check at GYRO-Z RING2: ", str(detectionCounter))
-        if detectionCounter == 12:
+        if detectionCounter == 12 and test1 == test2:
             print(df)
             df_to_csv(df, "../DataSet2/test.csv")
             reset_counter()
