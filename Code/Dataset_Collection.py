@@ -20,6 +20,8 @@ df = pd.DataFrame(columns=headers)
 lock = threading.Lock()
 detectionCounter = 0
 testCounter = 1
+test1 = 0
+test2 = 0
 
 
 def update_counter():
@@ -43,6 +45,22 @@ def inc_test_counter():
     lock.release()
 
 
+def updateTest1(test):
+    global test1
+    lock.acquire()
+    test1 = test
+    print("TEST1", str(test1))
+    lock.release()
+
+
+def updateTest2(test):
+    global test2
+    lock.acquire()
+    test2 = test
+    print("TEST2", str(test2))
+    lock.release()
+
+
 def listener(event):
     if event.path == "/":
         print("SKIP")
@@ -50,10 +68,14 @@ def listener(event):
     elif event.path == "/Ring1/TEST":
         test = [testCounter] * 20
         df['TEST'] = test
+        list = event.data
+        updateTest1(list[2])
 
     elif event.path == "/Ring2/TEST":
         test = [testCounter] * 20
         df['TEST'] = test
+        list = event.data
+        updateTest2(list[2])
 
     elif event.path == "/Ring1/ACC-X":
         del event.data[0]
@@ -120,10 +142,11 @@ def listener(event):
         print("GYRO-Z-Ring1: ", str(event.data))
         df['GYRO-Z-Ring1'] = event.data
         update_counter()
+
         print("Check at GYRO-Z RING1: ", str(detectionCounter))
-        if detectionCounter == 12:
+        if detectionCounter == 12 and test1 == test2:
             print(df)
-            df_to_csv(df, "../DataSet2/counter.csv")
+            df_to_csv(df, "../DataSet2/test.csv")
             reset_counter()
             print("Check reset at GYRO-Z RING1: ", str(detectionCounter))
             inc_test_counter()
@@ -132,14 +155,16 @@ def listener(event):
         del event.data[0]
         print("GYRO-Z-Ring2: ", str(event.data))
         df['GYRO-Z-Ring2'] = event.data
+
         update_counter()
         print("Check at GYRO-Z RING2: ", str(detectionCounter))
-        if detectionCounter == 12:
+        if detectionCounter == 12 and test1 == test2:
             print(df)
-            df_to_csv(df, "../DataSet2/counter.csv")
+            df_to_csv(df, "../DataSet2/test.csv")
             reset_counter()
             print("Check reset at GYRO-Z RING2: ", str(detectionCounter))
             inc_test_counter()
+
 
     else:
         print("OTHER: ", str(event.path), " :", str(event.data))
