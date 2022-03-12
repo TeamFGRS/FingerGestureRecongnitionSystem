@@ -39,6 +39,7 @@ def reset_counter():
     detectionCounter = 0
     lock.release()
 
+
 def updateTest1(test):
     global test1
     lock.acquire()
@@ -53,6 +54,17 @@ def updateTest2(test):
     test2 = test
     print("TEST2", str(test2))
     lock.release()
+
+
+def writeToFB(value, test):
+    # ref_G = firebase_admin.db.reference("/Prediction/Gesture")
+    # ref_T = firebase_admin.db.reference("/Prediction/Test")
+    # ref_G.set(value)
+    # ref_T.set(test)
+    ref = firebase_admin.db.reference("/Prediction")
+    ref.set({
+        "Gesture": value,
+        "Test": test})
 
 
 def listener(event):
@@ -133,7 +145,11 @@ def listener(event):
             fe = RT_FE(df)
             print("FEATURE EXTRACTION: ")
             print(fe)
-            KNN_predict(predictor, fe)
+            pred = KNN_predict(predictor, fe)
+            writeToFB(pred[0], test1)
+
+
+
 
     elif event.path == "/Ring2/GYRO-Z":
         del event.data[0]
@@ -147,7 +163,9 @@ def listener(event):
             fe = RT_FE(df)
             print("FEATURE EXTRACTION: ")
             print(fe)
-            KNN_predict(predictor, fe)
+            pred = KNN_predict(predictor, fe)
+            writeToFB(pred[0], test2)
+
 
     else:
         print("OTHER: ", str(event.path), " :", str(event.data))
