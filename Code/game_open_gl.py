@@ -20,12 +20,10 @@ default_app = firebase_admin.initialize_app(cred, {
 gesture_ref = firebase_admin.db.reference('/Prediction/Gesture')
 
 def listener(event):
-    # if event.path == "/":
-    #     print("SKIP")
-    # elif event.path == "Test":
-    #     print("GESTURE TEST", gesture_ref.get())
-    print(event.path)
-    print(event.data)
+    if event.path == "/":
+        print("SKIP")
+    elif event.path == "/Test":
+        print(gesture_ref.get())
 
 gesture_listener = firebase_admin.db.reference('/Prediction').listen(listener)
 # in a cube, we have 12 conxns between the nodes(/corners)
