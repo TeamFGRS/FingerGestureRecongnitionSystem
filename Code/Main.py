@@ -57,14 +57,14 @@ def updateTest2(test):
 
 
 def writeToFB(value, test):
-    # ref_G = firebase_admin.db.reference("/Prediction/Gesture")
-    # ref_T = firebase_admin.db.reference("/Prediction/Test")
-    # ref_G.set(value)
-    # ref_T.set(test)
-    ref = firebase_admin.db.reference("/Prediction")
-    ref.set({
-        "Gesture": value,
-        "Test": test})
+    ref_G = firebase_admin.db.reference("/Prediction/Gesture")
+    ref_T = firebase_admin.db.reference("/Prediction/Test")
+    ref_G.set(value)
+    ref_T.set(test)
+    # ref = firebase_admin.db.reference("/Prediction")
+    # ref.set({
+    #     "Gesture": value,
+    #     "Test": test})
 
 
 def listener(event):
@@ -148,9 +148,6 @@ def listener(event):
             pred = KNN_predict(predictor, fe)
             writeToFB(pred[0], test1)
 
-
-
-
     elif event.path == "/Ring2/GYRO-Z":
         del event.data[0]
         df['GYRO-Z-Ring2'] = event.data
@@ -165,7 +162,6 @@ def listener(event):
             print(fe)
             pred = KNN_predict(predictor, fe)
             writeToFB(pred[0], test2)
-
 
     else:
         print("OTHER: ", str(event.path), " :", str(event.data))
