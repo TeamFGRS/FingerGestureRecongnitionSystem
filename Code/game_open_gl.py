@@ -1,12 +1,14 @@
 import pygame
 from pygame.locals import *
-
+from turtle import *
 from OpenGL.GL import *
 from OpenGL.GLU import *
 
 # in a cube, we have 12 conxns between the nodes(/corners)
 # node = vertex
 changeCount = 0
+currentShape = ''
+resetShape = False
 
 # a cube has 8 verticies
 verticies_cube = (
@@ -90,6 +92,39 @@ colors = (
     (0, 1, 1),
 )
 
+def reinitializeCube():
+    verticies_cube = ( (1, -1, -1), (1, 1, -1), (-1, 1, -1), (-1, -1, -1),
+                       (1, -1, 1), (1, 1, 1), (-1, -1, 1), (-1, 1, 1), )
+
+    # an edge ( i.e. cnxn between two nodes)
+    edges_cube = ( (0, 1), (0, 3), (0, 4), (2, 1),(2, 3),(2, 7),(6, 3),(6, 4),
+                   (6, 7), (5, 1), (5, 4), (5, 7), )
+
+    # surfaces of the cube
+    surfaces = ( (0, 1, 2, 3), (3, 2, 7, 6), (6, 7, 5, 4), (4, 5, 1, 0), (1, 5, 7, 2), (4, 0, 3, 6), )
+
+
+    # colours
+    colors = ( (1, 0, 0), (0, 1, 0), (0, 0, 1), (0, 0, 0), (1, 1, 1), (0, 1, 1), (1, 0, 0),
+               (0, 1, 0), (0, 0, 1), (0, 0, 0), (1, 1, 1), (0, 1, 1), )
+
+#def resetCube():
+ #   glLoadIdentity()
+  #  gluPerspective(45, (display[0] / display[1]), 0.1, 50.0)
+   # glTranslatef(0.0, 0.0, -10)  # x-y-z parameters, us moving about the objet
+    #glRotatef(25, 2, 1, 0)  # (degree,x,y,z)
+
+
+def reinitiliazeTriangle():
+    verticies_triangle = ((-1, 0, 1), (-1, 0, -1), (1, 0, 0), (0, 3, 0),)
+
+    edges_triangle = ((0, 1), (0, 2), (1, 2), (3, 0), (3, 1), (3, 2),)
+
+    surfaces_triangle = ((0, 1, 2), (0, 1, 3), (0, 2, 3), (1, 2, 3))
+
+    colors = ((1, 0, 0), (0, 1, 0), (0, 0, 1), (0, 0, 0), (1, 1, 1), (0, 1, 1), (1, 0, 0),
+              (0, 1, 0), (0, 0, 1), (0, 0, 0), (1, 1, 1), (0, 1, 1),)
+
 
 # making our cube
 # everytime we do gl code/object, we have to encase it with glBegin and glEnd
@@ -133,19 +168,21 @@ def Triangle():
 
 def main():
     global changeCount
+    global resetShape
+    global currentShape
     pygame.init()  # pygame initialization
     display = (800, 600)
     screen = pygame.display.set_mode(display, DOUBLEBUF | OPENGL)  # we have to tell pygame we r using opengl
 
-    # Background
-    # background = pygame.image.load('panda.png')
+    gluPerspective(45, (display[0] / display[1]), 0.1, 50.0)
+    # (field of view, aspect ratio=width/height, clipping planes = plane tht clips away showimng the object
+    # ie when u zoom out a lot it's going to disapear, 0,1 then 50 is pretty wide)
 
-    gluPerspective(45, (display[0] / display[1]), 0.1,
-                   50.0)  # (field of view, aspect ratio=width/height, clipping planes = plane tht clips away showimng the object ie when u zoom out a lot it's going to disapear, 0,1 then 50 is pretty wide)
 
     glTranslatef(0.0, 0.0, -10)  # x-y-z parameters, us moving about the objet
-
     glRotatef(25, 2, 1, 0)  # (degree,x,y,z)
+
+   # glPopMatrix()
 
     while True:
         for event in pygame.event.get():
@@ -162,7 +199,6 @@ def main():
                     glTranslatef(0, 1, 0)
                 if event.key == pygame.K_DOWN:  # this means DOWN arrow key
                     glTranslatef(0, -1, 0)
-                    Triangle()
                 if event.key == pygame.K_x:  # rotate around x axis
                     glRotatef(25, 1, 0, 0)  # (degree,x,y,z)
                 if event.key == pygame.K_y:  # rotate around y axis
@@ -172,8 +208,10 @@ def main():
                 if event.key == pygame.K_a:  # rotate around all axis
                     glRotatef(25, 1, 1, 1)  # (degree,x,y,z)
                 if event.key == pygame.K_c:
-                    changeCount =changeCount + 1
+                    changeCount = changeCount + 1
 
+                if event.key == pygame.K_r:
+                    resetShape = True
 
 
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -182,35 +220,41 @@ def main():
                 if event.button == 5:  # backwards ie zoom out is defined as 5
                     glTranslatef(0, 0, -1.0)
 
+
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
         # colour of background
         glClearColor(0.7, 0.8, 0.88, 1)  # (red, green, blue, alpha)
         glClear(GL_COLOR_BUFFER_BIT)
 
-        # Background
-        # pygame.display.flip()
-        # screen.blit(background, (0, 0))  # 0,0 are the coorrdinates of the image ie where we want it to disappear
-
-
+        # Changing Shapes
         if changeCount % 2 != 0:
             Triangle()
-        elif changeCount %2 == 0:
+            currentShape = 'Triangle'
+        elif changeCount % 2 == 0:
             Cube()
+            currentShape = 'Cube'
 
 
+        # Resetting Shapes
+        if resetShape == True:
+            if currentShape == 'Cube':
+                glLoadIdentity()
+                gluPerspective(45, (display[0] / display[1]), 0.1, 50.0)
+                glTranslatef(0.0, 0.0, -10)  # x-y-z parameters, us moving about the objet
+                glRotatef(25, 2, 1, 0)  # (degree,x,y,z)
 
-        '''
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_c:
-                Triangle()
-            else:
-                Cube()
-        '''
 
-        # Triangle()
+            elif currentShape == 'Triangle':
+                glLoadIdentity()
+                gluPerspective(45, (display[0] / display[1]), 0.1, 50.0)
+                glTranslatef(0.0, 0.0, -10)  # x-y-z parameters, us moving about the objet
+                glRotatef(25, 2, 1, 0)  # (degree,x,y,z)
+
+
         pygame.display.flip()  # an alternative could be display.update()
         pygame.time.wait(10)  # in ms
 
 
 main()
+
