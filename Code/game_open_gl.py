@@ -6,7 +6,7 @@ from OpenGL.GLU import *
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import db
-
+from threading import Thread, Lock
 
 # Connect to Firebase
 cred = credentials.Certificate(
@@ -16,21 +16,31 @@ default_app = firebase_admin.initialize_app(cred, {
     'databaseURL': "https://fingergesturerecognitionsystem-default-rtdb.firebaseio.com/"
 })
 
-
 gesture_ref = firebase_admin.db.reference('/Prediction/Gesture')
+
+
+# gesture = ""
+# changeCount = 0
+# currentShape = ''
+# resetShape = False
+
+def getGesture(gest_rec):
+    global gesture
+    lock.acquire()
+    gesture = gest_rec
+    lock.release()
+
 
 def listener(event):
     if event.path == "/":
         print("SKIP")
     elif event.path == "/Test":
-        print(gesture_ref.get())
+        getGesture(gesture_ref.get())
+        # gesture = gesture_ref.get()
+        # print(gesture)
+
 
 gesture_listener = firebase_admin.db.reference('/Prediction').listen(listener)
-# in a cube, we have 12 conxns between the nodes(/corners)
-# node = vertex
-changeCount = 0
-currentShape = ''
-resetShape = False
 
 # a cube has 8 verticies
 verticies_cube = (
@@ -114,39 +124,6 @@ colors = (
     (0, 1, 1),
 )
 
-def reinitializeCube():
-    verticies_cube = ( (1, -1, -1), (1, 1, -1), (-1, 1, -1), (-1, -1, -1),
-                       (1, -1, 1), (1, 1, 1), (-1, -1, 1), (-1, 1, 1), )
-
-    # an edge ( i.e. cnxn between two nodes)
-    edges_cube = ( (0, 1), (0, 3), (0, 4), (2, 1),(2, 3),(2, 7),(6, 3),(6, 4),
-                   (6, 7), (5, 1), (5, 4), (5, 7), )
-
-    # surfaces of the cube
-    surfaces = ( (0, 1, 2, 3), (3, 2, 7, 6), (6, 7, 5, 4), (4, 5, 1, 0), (1, 5, 7, 2), (4, 0, 3, 6), )
-
-
-    # colours
-    colors = ( (1, 0, 0), (0, 1, 0), (0, 0, 1), (0, 0, 0), (1, 1, 1), (0, 1, 1), (1, 0, 0),
-               (0, 1, 0), (0, 0, 1), (0, 0, 0), (1, 1, 1), (0, 1, 1), )
-
-#def resetCube():
- #   glLoadIdentity()
-  #  gluPerspective(45, (display[0] / display[1]), 0.1, 50.0)
-   # glTranslatef(0.0, 0.0, -10)  # x-y-z parameters, us moving about the objet
-    #glRotatef(25, 2, 1, 0)  # (degree,x,y,z)
-
-
-def reinitiliazeTriangle():
-    verticies_triangle = ((-1, 0, 1), (-1, 0, -1), (1, 0, 0), (0, 3, 0),)
-
-    edges_triangle = ((0, 1), (0, 2), (1, 2), (3, 0), (3, 1), (3, 2),)
-
-    surfaces_triangle = ((0, 1, 2), (0, 1, 3), (0, 2, 3), (1, 2, 3))
-
-    colors = ((1, 0, 0), (0, 1, 0), (0, 0, 1), (0, 0, 0), (1, 1, 1), (0, 1, 1), (1, 0, 0),
-              (0, 1, 0), (0, 0, 1), (0, 0, 0), (1, 1, 1), (0, 1, 1),)
-
 
 # making our cube
 # everytime we do gl code/object, we have to encase it with glBegin and glEnd
@@ -188,60 +165,81 @@ def Triangle():
     glEnd()
 
 
-def main():
+# def main():
+if __name__ == "__main__":
     global changeCount
     global resetShape
     global currentShape
+
+    # REMOVED THESE WHEN CHANGED FROM main() TO "__main__"
+    # lock = threading.Lock()
+    # global gesture
+
+    # ADDED THESE WHEN CHANGED FROM main() TO "__main__"
+    lock = Lock()
+    changeCount = 0
+    currentShape = ''
+    resetShape = False
+    gesture = ""
+
     pygame.init()  # pygame initialization
     display = (800, 600)
     screen = pygame.display.set_mode(display, DOUBLEBUF | OPENGL)  # we have to tell pygame we r using opengl
 
-    gluPerspective(45, (display[0] / display[1]), 0.1, 50.0)
     # (field of view, aspect ratio=width/height, clipping planes = plane tht clips away showimng the object
     # ie when u zoom out a lot it's going to disapear, 0,1 then 50 is pretty wide)
-
+    gluPerspective(45, (display[0] / display[1]), 0.1, 50.0)
 
     glTranslatef(0.0, 0.0, -10)  # x-y-z parameters, us moving about the objet
     glRotatef(25, 2, 1, 0)  # (degree,x,y,z)
 
-   # glPopMatrix()
+    # ADDED THREAD T1 & START WHEN CHAINED main() TO "__main__"
+    t1 = Thread(target=getGesture, args=(lock,))
+    t1.start()
 
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                pygame.quit()  # uninit pygame
+                pygame.quit()
                 quit()
 
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT:  # this means left arrow key
-                    glTranslatef(-1, 0, 0)  # making the x coordinste -1 bcz moving left is moving in negative direction
-                if event.key == pygame.K_RIGHT:  # this means right arrow key
-                    glTranslatef(1, 0, 0)
-                if event.key == pygame.K_UP:  # this means up arrow key
-                    glTranslatef(0, 1, 0)
-                if event.key == pygame.K_DOWN:  # this means DOWN arrow key
-                    glTranslatef(0, -1, 0)
-                if event.key == pygame.K_x:  # rotate around x axis
-                    glRotatef(25, 1, 0, 0)  # (degree,x,y,z)
-                if event.key == pygame.K_y:  # rotate around y axis
-                    glRotatef(25, 0, 1, 0)  # (degree,x,y,z)
-                if event.key == pygame.K_z:  # rotate around z axis
-                    glRotatef(25, 0, 0, 1)  # (degree,x,y,z)
-                if event.key == pygame.K_a:  # rotate around all axis
-                    glRotatef(25, 1, 1, 1)  # (degree,x,y,z)
-                if event.key == pygame.K_c:
-                    changeCount = changeCount + 1
+            print("***************", gesture, "***************")
+            if gesture == "up":
+                print("IN IF", gesture)
+                glTranslatef(0, 1, 0)
+            elif gesture == "down":
+                print("IN IF", gesture)
+                glTranslatef(0, -1, 0)
+            elif gesture == "left":
+                print("IN IF", gesture)
+                glTranslatef(-1, 0, 0)
+            elif gesture == "right":
+                print("IN IF", gesture)
+                glTranslatef(1, 0, 0)
+            elif gesture == "clock":
+                print("IN IF", gesture)
+                glTranslatef(25, 1, 1, 1)
+            elif gesture == "counter":
+                print("IN IF", gesture)
+                glTranslatef(25, -1, -1, -1)
 
+            # FOR WHEN WE HAVE ALL GESTURES
+            elif gesture == "snap":
+                print("IN IF", gesture)
+                changeCount = changeCount + 1
+            elif gesture == "pinch_in":
+                print("IN IF", gesture)
+                glTranslatef(0, 1.0, 1.0)
+            elif gesture == "pinch_out":
+                print("IN IF", gesture)
+                glTranslatef(0, 0, -1.0)
+            gesture = ""
+            print("EMPTY GESTURE", gesture)
+
+            # FOR RESET
+            if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_r:
                     resetShape = True
-
-
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 4:  # forward ie zoom in is defined as 4
-                    glTranslatef(0, 1.0, 1.0)
-                if event.button == 5:  # backwards ie zoom out is defined as 5
-                    glTranslatef(0, 0, -1.0)
-
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
@@ -257,15 +255,13 @@ def main():
             Cube()
             currentShape = 'Cube'
 
-
         # Resetting Shapes
-        if resetShape == True:
+        if resetShape:
             if currentShape == 'Cube':
                 glLoadIdentity()
                 gluPerspective(45, (display[0] / display[1]), 0.1, 50.0)
                 glTranslatef(0.0, 0.0, -10)  # x-y-z parameters, us moving about the objet
                 glRotatef(25, 2, 1, 0)  # (degree,x,y,z)
-
 
             elif currentShape == 'Triangle':
                 glLoadIdentity()
@@ -273,10 +269,11 @@ def main():
                 glTranslatef(0.0, 0.0, -10)  # x-y-z parameters, us moving about the objet
                 glRotatef(25, 2, 1, 0)  # (degree,x,y,z)
 
-
         pygame.display.flip()  # an alternative could be display.update()
         pygame.time.wait(10)  # in ms
 
+    # JOINING THREAD
+    t1.join()
 
-main()
-
+# if __name__ == "__main__":
+#     main()
