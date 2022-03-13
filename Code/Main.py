@@ -17,7 +17,8 @@ default_app = firebase_admin.initialize_app(cred, {
 })
 
 headers = ['ACC-X-Ring1', 'ACC-Y-Ring1', 'ACC-Z-Ring1', 'GYRO-X-Ring1', 'GYRO-Y-Ring1', 'GYRO-Z-Ring1', 'ACC-X-Ring2',
-           'ACC-Y-Ring2', 'ACC-Z-Ring2', 'GYRO-X-Ring2', 'GYRO-Y-Ring2', 'GYRO-Z-Ring2', 'TEST']
+           'ACC-Y-Ring2', 'ACC-Z-Ring2', 'GYRO-X-Ring2', 'GYRO-Y-Ring2', 'GYRO-Z-Ring2', 'ACC-X-Ring3', 'ACC-Y-Ring3',
+           'ACC-Z-Ring3', 'GYRO-X-Ring3', 'GYRO-Y-Ring3', 'GYRO-Z-Ring3', 'TEST']
 df = pd.DataFrame(columns=headers)
 
 lock = threading.Lock()
@@ -83,6 +84,12 @@ def listener(event):
         list = event.data
         updateTest2(list[2])
 
+    elif event.path == "/Ring3/TEST":
+        del event.data[0]
+        df['TEST'] = event.data
+        list = event.data
+        updateTest3(list[2])
+
     elif event.path == "/Ring1/ACC-X":
         del event.data[0]
         df['ACC-X-Ring1'] = event.data
@@ -91,6 +98,11 @@ def listener(event):
     elif event.path == "/Ring2/ACC-X":
         del event.data[0]
         df['ACC-X-Ring2'] = event.data
+        update_counter()
+
+    elif event.path == "/Ring3/ACC-X":
+        del event.data[0]
+        df['ACC-X-Ring3'] = event.data
         update_counter()
 
     elif event.path == "/Ring1/ACC-Y":
@@ -103,6 +115,11 @@ def listener(event):
         df['ACC-Y-Ring2'] = event.data
         update_counter()
 
+    elif event.path == "/Ring3/ACC-Y":
+        del event.data[0]
+        df['ACC-Y-Ring3'] = event.data
+        update_counter()
+
     elif event.path == "/Ring1/ACC-Z":
         del event.data[0]
         df['ACC-Z-Ring1'] = event.data
@@ -111,6 +128,11 @@ def listener(event):
     elif event.path == "/Ring2/ACC-Z":
         del event.data[0]
         df['ACC-Z-Ring2'] = event.data
+        update_counter()
+
+    elif event.path == "/Ring3/ACC-Z":
+        del event.data[0]
+        df['ACC-Z-Ring3'] = event.data
         update_counter()
 
     elif event.path == "/Ring1/GYRO-X":
@@ -123,6 +145,11 @@ def listener(event):
         df['GYRO-X-Ring2'] = event.data
         update_counter()
 
+    elif event.path == "/Ring3/GYRO-X":
+        del event.data[0]
+        df['GYRO-X-Ring3'] = event.data
+        update_counter()
+
     elif event.path == "/Ring1/GYRO-Y":
         del event.data[0]
         df['GYRO-Y-Ring1'] = event.data
@@ -133,12 +160,17 @@ def listener(event):
         df['GYRO-Y-Ring2'] = event.data
         update_counter()
 
+    elif event.path == "/Ring3/GYRO-Y":
+        del event.data[0]
+        df['GYRO-Y-Ring3'] = event.data
+        update_counter()
+
     elif event.path == "/Ring1/GYRO-Z":
         del event.data[0]
         df['GYRO-Z-Ring1'] = event.data
         update_counter()
         print("Check at GYRO-Z RING1: ", str(detectionCounter))
-        if detectionCounter == 12 and test1 == test2:
+        if detectionCounter == 18 and test1 == test2 and test1 == test3:
             print(df)
             reset_counter()
             print("Check reset at GYRO-Z RING1: ", str(detectionCounter))
@@ -153,7 +185,7 @@ def listener(event):
         df['GYRO-Z-Ring2'] = event.data
         update_counter()
         print("Check at GYRO-Z RING2: ", str(detectionCounter))
-        if detectionCounter == 12 and test1 == test2:
+        if detectionCounter == 18 and test1 == test2 and test1 == test3:
             print(df)
             reset_counter()
             print("Check reset at GYRO-Z RING2: ", str(detectionCounter))
