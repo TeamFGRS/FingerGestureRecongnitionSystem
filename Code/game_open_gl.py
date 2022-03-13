@@ -19,11 +19,6 @@ default_app = firebase_admin.initialize_app(cred, {
 gesture_ref = firebase_admin.db.reference('/Prediction/Gesture')
 
 
-# gesture = ""
-# changeCount = 0
-# currentShape = ''
-# resetShape = False
-
 def getGesture(gest_rec):
     global gesture
     lock.acquire()
@@ -36,8 +31,6 @@ def listener(event):
         print("SKIP")
     elif event.path == "/Test":
         getGesture(gesture_ref.get())
-        # gesture = gesture_ref.get()
-        # print(gesture)
 
 
 gesture_listener = firebase_admin.db.reference('/Prediction').listen(listener)
@@ -203,43 +196,33 @@ if __name__ == "__main__":
                 pygame.quit()
                 quit()
 
-            print("***************", gesture, "***************")
-            if gesture == "up":
-                print("IN IF", gesture)
-                glTranslatef(0, 1, 0)
-            elif gesture == "down":
-                print("IN IF", gesture)
-                glTranslatef(0, -1, 0)
-            elif gesture == "left":
-                print("IN IF", gesture)
-                glTranslatef(-1, 0, 0)
-            elif gesture == "right":
-                print("IN IF", gesture)
-                glTranslatef(1, 0, 0)
-            elif gesture == "clock":
-                print("IN IF", gesture)
-                glTranslatef(25, 1, 1, 1)
-            elif gesture == "counter":
-                print("IN IF", gesture)
-                glTranslatef(25, -1, -1, -1)
-
-            # FOR WHEN WE HAVE ALL GESTURES
-            elif gesture == "snap":
-                print("IN IF", gesture)
-                changeCount = changeCount + 1
-            elif gesture == "pinch_in":
-                print("IN IF", gesture)
-                glTranslatef(0, 1.0, 1.0)
-            elif gesture == "pinch_out":
-                print("IN IF", gesture)
-                glTranslatef(0, 0, -1.0)
-            gesture = ""
-            print("EMPTY GESTURE", gesture)
-
             # FOR RESET
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_r:
                     resetShape = True
+
+        if gesture == "up":
+            glTranslatef(0, 1, 0)
+        elif gesture == "down":
+            glTranslatef(0, -1, 0)
+        elif gesture == "left":
+            glTranslatef(-1, 0, 0)
+        elif gesture == "right":
+            glTranslatef(1, 0, 0)
+        elif gesture == "clock":
+            glTranslatef(25, 1, 1, 1)
+        elif gesture == "counter":
+            glTranslatef(25, -1, -1, -1)
+
+        # FOR WHEN WE HAVE ALL GESTURES
+        elif gesture == "snap":
+            changeCount = changeCount + 1
+        elif gesture == "pinch_in":
+            glTranslatef(0, 1.0, 1.0)
+        elif gesture == "pinch_out":
+            glTranslatef(0, 0, -1.0)
+        gesture = ""
+        print("EMPTY GESTURE", gesture)
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
