@@ -25,6 +25,7 @@ lock = threading.Lock()
 detectionCounter = 0
 test1 = 0
 test2 = 0
+test3 = 0
 
 
 def update_counter():
@@ -56,16 +57,18 @@ def updateTest2(test):
     print("TEST2", str(test2))
     lock.release()
 
+def updateTest3(test):
+    global test3
+    lock.acquire()
+    test3 = test
+    print("TEST3", str(test3))
+    lock.release()
 
 def writeToFB(value, test):
     ref_G = firebase_admin.db.reference("/Prediction/Gesture")
     ref_T = firebase_admin.db.reference("/Prediction/Test")
     ref_G.set(value)
     ref_T.set(test)
-    # ref = firebase_admin.db.reference("/Prediction")
-    # ref.set({
-    #     "Gesture": value,
-    #     "Test": test})
 
 
 def listener(event):
@@ -194,6 +197,21 @@ def listener(event):
             print(fe)
             pred = KNN_predict(predictor, fe)
             writeToFB(pred[0], test2)
+
+    elif event.path == "/Ring3/GYRO-Z":
+        del event.data[0]
+        df['GYRO-Z-Ring3'] = event.data
+        update_counter()
+        print("Check at GYRO-Z RING3: ", str(detectionCounter))
+        if detectionCounter == 18 and test1 == test2 and test1 == test3:
+            print(df)
+            reset_counter()
+            print("Check reset at GYRO-Z RING3: ", str(detectionCounter))
+            fe = RT_FE(df)
+            print("FEATURE EXTRACTION: ")
+            print(fe)
+            pred = KNN_predict(predictor, fe)
+            writeToFB(pred[0], test3)
 
     else:
         print("OTHER: ", str(event.path), " :", str(event.data))
