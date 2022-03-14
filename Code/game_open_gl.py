@@ -203,26 +203,37 @@ if __name__ == "__main__":
 
         if gesture == "up":
             glTranslatef(0, 1, 0)
+            print("GESTUTRE ", gesture)
         elif gesture == "down":
             glTranslatef(0, -1, 0)
+            print("GESTUTRE ", gesture)
         elif gesture == "left":
             glTranslatef(-1, 0, 0)
+            print("GESTUTRE ", gesture)
         elif gesture == "right":
             glTranslatef(1, 0, 0)
+            print("GESTUTRE ", gesture)
         elif gesture == "clock":
-            glTranslatef(25, 1, 1, 1)
+            #glRotatef(25, -1, -1, -1)
+            glRotatef(30, 0, 0, -1)
+            print("GESTUTRE ", gesture)
         elif gesture == "counter":
-            glTranslatef(25, -1, -1, -1)
+            #glRotatef(25, 1, 1, 1)
+            glRotatef(30, 0, 0, 1)  # only x
+            print("GESTUTRE ", gesture)
 
         # FOR WHEN WE HAVE ALL GESTURES
         elif gesture == "snap":
             changeCount = changeCount + 1
+            print("GESTUTRE ", gesture)
         elif gesture == "pinch_in":
             glTranslatef(0, 1.0, 1.0)
+            print("GESTUTRE ", gesture)
         elif gesture == "pinch_out":
             glTranslatef(0, 0, -1.0)
+            print("GESTUTRE ", gesture)
         gesture = ""
-        print("EMPTY GESTURE", gesture)
+        #print("EMPTY GESTURE", gesture)
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
