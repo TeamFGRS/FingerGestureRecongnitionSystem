@@ -8,6 +8,8 @@ from firebase_admin import credentials
 from firebase_admin import db
 from threading import Thread, Lock
 
+# import threading
+
 # Connect to Firebase
 cred = credentials.Certificate(
     '../FirebaseKey/fingergesturerecognitionsystem-firebase-adminsdk-xcpqf-cf83d06251.json')  # get service account key JSON
@@ -17,6 +19,22 @@ default_app = firebase_admin.initialize_app(cred, {
 })
 
 gesture_ref = firebase_admin.db.reference('/Prediction/Gesture')
+
+
+# lock = threading.Lock()
+
+def resetShape():
+    if currentShape == 'Cube':
+        glLoadIdentity()
+        gluPerspective(45, (display[0] / display[1]), 0.1, 50.0)
+        glTranslatef(0.0, 0.0, -10)  # x-y-z parameters, us moving about the objet
+        glRotatef(25, 2, 1, 0)  # (degree,x,y,z)
+
+    elif currentShape == 'Triangle':
+        glLoadIdentity()
+        gluPerspective(45, (display[0] / display[1]), 0.1, 50.0)
+        glTranslatef(0.0, 0.0, -10)  # x-y-z parameters, us moving about the objet
+        glRotatef(25, 2, 1, 0)  # (degree,x,y,z)
 
 
 def getGesture(gest_rec):
@@ -161,7 +179,6 @@ def Triangle():
 # def main():
 if __name__ == "__main__":
     global changeCount
-    global resetShape
     global currentShape
     global currentMatrix
 
@@ -173,7 +190,6 @@ if __name__ == "__main__":
     lock = Lock()
     changeCount = 0
     currentShape = ''
-    resetShape = False
     gesture = ""
     currentMatrix = ""
 
@@ -201,7 +217,7 @@ if __name__ == "__main__":
             # FOR RESET
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_r:
-                    resetShape = True
+                    resetShape()
 
         if gesture == "up":
             glTranslatef(0, 1, 0)
@@ -216,11 +232,11 @@ if __name__ == "__main__":
             glTranslatef(1, 0, 0)
             print("GESTUTRE ", gesture)
         elif gesture == "clock":
-            #glRotatef(25, -1, -1, -1)
+            # glRotatef(25, -1, -1, -1)
             glRotatef(30, 0, 0, -1)
             print("GESTUTRE ", gesture)
         elif gesture == "counter":
-            #glRotatef(25, 1, 1, 1)
+            # glRotatef(25, 1, 1, 1)
             glRotatef(30, 0, 0, 1)  # only x
             print("GESTUTRE ", gesture)
 
@@ -235,16 +251,12 @@ if __name__ == "__main__":
             glTranslatef(0, 0, -1.0)
             print("GESTUTRE ", gesture)
         gesture = ""
-        #print("EMPTY GESTURE", gesture)
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
         # colour of background
         glClearColor(0.7, 0.8, 0.88, 1)  # (red, green, blue, alpha)
         glClear(GL_COLOR_BUFFER_BIT)
-
-        currentMatrix = glGet()
-        print("Matrix Mode: ", currentMatrix)
 
         # Changing Shapes
         if changeCount % 2 != 0:
@@ -253,20 +265,6 @@ if __name__ == "__main__":
         elif changeCount % 2 == 0:
             Cube()
             currentShape = 'Cube'
-
-        # Resetting Shapes
-        if resetShape:
-            if currentShape == 'Cube':
-                glLoadIdentity()
-                gluPerspective(45, (display[0] / display[1]), 0.1, 50.0)
-                glTranslatef(0.0, 0.0, -10)  # x-y-z parameters, us moving about the objet
-                glRotatef(25, 2, 1, 0)  # (degree,x,y,z)
-
-            elif currentShape == 'Triangle':
-                glLoadIdentity()
-                gluPerspective(45, (display[0] / display[1]), 0.1, 50.0)
-                glTranslatef(0.0, 0.0, -10)  # x-y-z parameters, us moving about the objet
-                glRotatef(25, 2, 1, 0)  # (degree,x,y,z)
 
         pygame.display.flip()  # an alternative could be display.update()
         pygame.time.wait(10)  # in ms
