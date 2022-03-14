@@ -163,6 +163,7 @@ if __name__ == "__main__":
     global changeCount
     global resetShape
     global currentShape
+    global currentMatrix
 
     # REMOVED THESE WHEN CHANGED FROM main() TO "__main__"
     # lock = threading.Lock()
@@ -174,6 +175,7 @@ if __name__ == "__main__":
     currentShape = ''
     resetShape = False
     gesture = ""
+    currentMatrix = ""
 
     pygame.init()  # pygame initialization
     display = (800, 600)
@@ -240,6 +242,9 @@ if __name__ == "__main__":
         # colour of background
         glClearColor(0.7, 0.8, 0.88, 1)  # (red, green, blue, alpha)
         glClear(GL_COLOR_BUFFER_BIT)
+
+        currentMatrix = glGet()
+        print("Matrix Mode: ", currentMatrix)
 
         # Changing Shapes
         if changeCount % 2 != 0:
