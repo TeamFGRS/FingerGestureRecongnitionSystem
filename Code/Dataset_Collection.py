@@ -18,6 +18,8 @@ headers = ['ACC-X-Ring1', 'ACC-Y-Ring1', 'ACC-Z-Ring1', 'GYRO-X-Ring1', 'GYRO-Y-
            'ACC-Z-Ring3', 'GYRO-X-Ring3', 'GYRO-Y-Ring3', 'GYRO-Z-Ring3', 'TEST']
 df = pd.DataFrame(columns=headers)
 
+directory = "../DataSet3/counter.csv"
+
 lock = threading.Lock()
 detectionCounter = 0
 testCounter = 1
@@ -190,7 +192,7 @@ def listener(event):
         print("Check at GYRO-Z RING1: ", str(detectionCounter))
         if detectionCounter == 18 and test1 == test2 and test1 == test3:
             print(df)
-            df_to_csv(df, "../DataSet2/test.csv")
+            df_to_csv(df, directory)
             reset_counter()
             print("Check reset at GYRO-Z RING1: ", str(detectionCounter))
             inc_test_counter()
@@ -204,7 +206,7 @@ def listener(event):
         print("Check at GYRO-Z RING2: ", str(detectionCounter))
         if detectionCounter == 18 and test1 == test2 and test1 == test3:
             print(df)
-            df_to_csv(df, "../DataSet2/test.csv")
+            df_to_csv(df, directory)
             reset_counter()
             print("Check reset at GYRO-Z RING2: ", str(detectionCounter))
             inc_test_counter()
@@ -218,7 +220,7 @@ def listener(event):
         print("Check at GYRO-Z RING3: ", str(detectionCounter))
         if detectionCounter == 18 and test1 == test2 and test1 == test3:
             print(df)
-            df_to_csv(df, "../DataSet2/test.csv")
+            df_to_csv(df, directory)
             reset_counter()
             print("Check reset at GYRO-Z RING3: ", str(detectionCounter))
             inc_test_counter()
