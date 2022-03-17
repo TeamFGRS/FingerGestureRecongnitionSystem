@@ -8,7 +8,8 @@ def RT_FE(grouped):
         min_df_3 = min_df_2.set_axis(
             ['ACC-X-MIN-Ring1', 'ACC-Y-MIN-Ring1', 'ACC-Z-MIN-Ring1', 'GYRO-X-MIN-Ring1', 'GYRO-Y-MIN-Ring1',
              'GYRO-Z-MIN-Ring1', 'ACC-X-MIN-Ring2', 'ACC-Y-MIN-Ring2', 'ACC-Z-MIN-Ring2', 'GYRO-X-MIN-Ring2',
-             'GYRO-Y-MIN-Ring2', 'GYRO-Z-MIN-Ring2'],
+             'GYRO-Y-MIN-Ring2', 'GYRO-Z-MIN-Ring2', 'ACC-X-MIN-Ring3', 'ACC-Y-MIN-Ring3', 'ACC-Z-MIN-Ring3',
+             'GYRO-X-MIN-Ring3', 'GYRO-Y-MIN-Ring3', 'GYRO-Z-MIN-Ring3'],
             axis=1, inplace=False)
         return min_df_3
 
@@ -22,7 +23,8 @@ def RT_FE(grouped):
         max_df_3 = max_df_2.set_axis(
             ['ACC-X-MAX-Ring1', 'ACC-Y-MAX-Ring1', 'ACC-Z-MAX-Ring1', 'GYRO-X-MAX-Ring1', 'GYRO-Y-MAX-Ring1',
              'GYRO-Z-MAX-Ring1', 'ACC-X-MAX-Ring2', 'ACC-Y-MAX-Ring2', 'ACC-Z-MAX-Ring2', 'GYRO-X-MAX-Ring2',
-             'GYRO-Y-MAX-Ring2', 'GYRO-Z-MAX-Ring2'],
+             'GYRO-Y-MAX-Ring2', 'GYRO-Z-MAX-Ring2', 'ACC-X-MAX-Ring3', 'ACC-Y-MAX-Ring3', 'ACC-Z-MAX-Ring3',
+             'GYRO-X-MAX-Ring3', 'GYRO-Y-MAX-Ring3', 'GYRO-Z-MAX-Ring3'],
             axis=1, inplace=False)
         return max_df_3
 
@@ -36,7 +38,8 @@ def RT_FE(grouped):
         mean_df_3 = mean_df_2.set_axis(
             ['ACC-X-MEAN-Ring1', 'ACC-Y-MEAN-Ring1', 'ACC-Z-MEAN-Ring1', 'GYRO-X-MEAN-Ring1', 'GYRO-Y-MEAN-Ring1',
              'GYRO-Z-MEAN-Ring1', 'ACC-X-MEAN-Ring2', 'ACC-Y-MEAN-Ring2', 'ACC-Z-MEAN-Ring2', 'GYRO-X-MEAN-Ring2',
-             'GYRO-Y-MEAN-Ring2', 'GYRO-Z-MEAN-Ring2'],
+             'GYRO-Y-MEAN-Ring2', 'GYRO-Z-MEAN-Ring2', 'ACC-X-MEAN-Ring3', 'ACC-Y-MEAN-Ring3', 'ACC-Z-MEAN-Ring3',
+             'GYRO-X-MEAN-Ring3', 'GYRO-Y-MEAN-Ring3', 'GYRO-Z-MEAN-Ring3'],
             axis=1, inplace=False)
         return mean_df_3
 
@@ -50,7 +53,8 @@ def RT_FE(grouped):
         var_df_3 = var_df_2.set_axis(
             ['ACC-X-VAR-Ring1', 'ACC-Y-VAR-Ring1', 'ACC-Z-VAR-Ring1', 'GYRO-X-VAR-Ring1', 'GYRO-Y-VAR-Ring1',
              'GYRO-Z-VAR-Ring1', 'ACC-X-VAR-Ring2', 'ACC-Y-VAR-Ring2', 'ACC-Z-VAR-Ring2', 'GYRO-X-VAR-Ring2',
-             'GYRO-Y-VAR-Ring2', 'GYRO-Z-VAR-Ring2'],
+             'GYRO-Y-VAR-Ring2', 'GYRO-Z-VAR-Ring2', 'ACC-X-VAR-Ring3', 'ACC-Y-VAR-Ring3', 'ACC-Z-VAR-Ring3',
+             'GYRO-X-VAR-Ring3', 'GYRO-Y-VAR-Ring3', 'GYRO-Z-VAR-Ring3'],
             axis=1, inplace=False)
         return var_df_3
 
@@ -64,7 +68,8 @@ def RT_FE(grouped):
         skew_df_3 = skew_df_2.set_axis(
             ['ACC-X-SKEW-Ring1', 'ACC-Y-SKEW-Ring1', 'ACC-Z-SKEW-Ring1', 'GYRO-X-SKEW-Ring1', 'GYRO-Y-SKEW-Ring1',
              'GYRO-Z-SKEW-Ring1', 'ACC-X-SKEW-Ring2', 'ACC-Y-SKEW-Ring2', 'ACC-Z-SKEW-Ring2', 'GYRO-X-SKEW-Ring2',
-             'GYRO-Y-SKEW-Ring2', 'GYRO-Z-SKEW-Ring2'],
+             'GYRO-Y-SKEW-Ring2', 'GYRO-Z-SKEW-Ring2', 'ACC-X-SKEW-Ring3', 'ACC-Y-SKEW-Ring3', 'ACC-Z-SKEW-Ring3',
+             'GYRO-X-SKEW-Ring3', 'GYRO-Y-SKEW-Ring3', 'GYRO-Z-SKEW-Ring3'],
             axis=1, inplace=False)
         return skew_df_3
 
@@ -78,7 +83,8 @@ def RT_FE(grouped):
         kurt_df_3 = kurt_df_2.set_axis(
             ['ACC-X-KURT-Ring1', 'ACC-Y-KURT-Ring1', 'ACC-Z-KURT-Ring1', 'GYRO-X-KURT-Ring1', 'GYRO-Y-KURT-Ring1',
              'GYRO-Z-KURT-Ring1', 'ACC-X-KURT-Ring2', 'ACC-Y-KURT-Ring2', 'ACC-Z-KURT-Ring2', 'GYRO-X-KURT-Ring2',
-             'GYRO-Y-KURT-Ring2', 'GYRO-Z-KURT-Ring2'],
+             'GYRO-Y-KURT-Ring2', 'GYRO-Z-KURT-Ring2', 'ACC-X-KURT-Ring3', 'ACC-Y-KURT-Ring3', 'ACC-Z-KURT-Ring3',
+             'GYRO-X-KURT-Ring3', 'GYRO-Y-KURT-Ring3', 'GYRO-Z-KURT-Ring3'],
             axis=1, inplace=False)
         return kurt_df_3
 
