@@ -53,27 +53,27 @@ def listener(event):
 gesture_listener = firebase_admin.db.reference('/Prediction').listen(listener)
 
 # a cube has 8 verticies
-verticies_cube = (
-    # (1, -1, -1),  # coordinates of node 0
-    # (1, 1, -1),
-    # (-1, 1, -1),
-    # (-1, -1, -1),
-    # (1, -1, 1),
-    # (1, 1, 1),
-    # (-1, -1, 1),
-    # (-1, 1, 1),
-
-    #VERTICES FOR SOLID CUBE WITH DIFFERENT COLOURS ON EACH PHASE
-    (1, 1, 1),
-    (1, -1, 1),
-    (-1, -1, 1),
-    (-1, 1, 1),
-    (1, 1, -1),
-    (1, -1, -1),
-    (-1, -1, -1),
-    (-1, 1, -1),
-
-)
+# verticies_cube = (
+#     # (1, -1, -1),  # coordinates of node 0
+#     # (1, 1, -1),
+#     # (-1, 1, -1),
+#     # (-1, -1, -1),
+#     # (1, -1, 1),
+#     # (1, 1, 1),
+#     # (-1, -1, 1),
+#     # (-1, 1, 1),
+#
+#     #VERTICES FOR SOLID CUBE WITH DIFFERENT COLOURS ON EACH PHASE
+#     (1, 1, 1),
+#     (1, -1, 1),
+#     (-1, -1, 1),
+#     (-1, 1, 1),
+#     (1, 1, -1),
+#     (1, -1, -1),
+#     (-1, -1, -1),
+#     (-1, 1, -1),
+#
+# )
 
 verticies_triangle = (
     (-1, 0, 1),
@@ -83,22 +83,22 @@ verticies_triangle = (
 )
 
 #NOT NEEDED FOR NEW CUBE
-edges_cube = (
-
-    (0, 1),  # node 0 connected to node 1
-    (0, 3),
-    (0, 4),
-    (2, 1),
-    (2, 3),
-    (2, 7),
-    (6, 3),
-    (6, 4),
-    (6, 7),
-    (5, 1),
-    (5, 4),
-    (5, 7),
-
-)
+# edges_cube = (
+#
+#     (0, 1),  # node 0 connected to node 1
+#     (0, 3),
+#     (0, 4),
+#     (2, 1),
+#     (2, 3),
+#     (2, 7),
+#     (6, 3),
+#     (6, 4),
+#     (6, 7),
+#     (5, 1),
+#     (5, 4),
+#     (5, 7),
+#
+# )
 
 edges_triangle = (
 
@@ -112,22 +112,22 @@ edges_triangle = (
 )
 
 # surfaces of the cube
-surfaces = (
-    # (0, 1, 2, 3),  # surface connecting node 0,1,2,3
-    # (3, 2, 7, 6),
-    # (6, 7, 5, 4),
-    # (4, 5, 1, 0),
-    # (1, 5, 7, 2),
-    # (4, 0, 3, 6),
-
-    #SURFACES FOR SOLID CUBE WITH DIFFERENT COLOURS ON EACH PHASE
-    (0, 1, 2, 3),
-    (4, 5, 1, 0),
-    (0, 1, 5, 4),
-    (3, 2, 6, 7),
-    (0, 3, 7, 4),
-    (1, 2, 6, 5),
-)
+# surfaces = (
+#     # (0, 1, 2, 3),  # surface connecting node 0,1,2,3
+#     # (3, 2, 7, 6),
+#     # (6, 7, 5, 4),
+#     # (4, 5, 1, 0),
+#     # (1, 5, 7, 2),
+#     # (4, 0, 3, 6),
+#
+#     #SURFACES FOR SOLID CUBE WITH DIFFERENT COLOURS ON EACH PHASE
+#     (0, 1, 2, 3),
+#     (4, 5, 1, 0),
+#     (0, 1, 5, 4),
+#     (3, 2, 6, 7),
+#     (0, 3, 7, 4),
+#     (1, 2, 6, 5),
+# )
 
 surfaces_triangle = (
     (0, 1, 2),  # surface connecting node 0,1,2
@@ -184,9 +184,9 @@ colors = (
 
 
 # making our cube
-# everytime we do gl code/object, we have to encase it with glBegin and glEnd
 def Cube():
     glBegin(GL_QUADS)
+
     #glColor3f(0.0, 1.0, 0.0)
     glColor3f(0.714, 0.839, 0.89) #b6d6e3
     glVertex3f(1.0, 1.0, -1.0)
@@ -261,19 +261,39 @@ def Cube():
 def Triangle():
     glBegin(GL_TRIANGLES)
 
-    for surface in surfaces_triangle:
-        x = 0
-        for vertex in surface:
-            x += 1
-            glColor3fv(colors[x])  # colour, rgb
-            glVertex3fv(verticies_triangle[vertex])
+    glColor3f(0.714, 0.839, 0.89)  # b6d6e3
+    glVertex3f(-1.0, 0.0, 1.0)
+    glVertex3f(-1.0, 0.0, -1.0)
+    glVertex3f(1.0, 0.0, 0.0)
 
-    glEnd()
+    glColor3f(0.612, 0.925, 0.357)  # 9CEC5B
+    glVertex3f(-1.0, 0.0, 1.0)
+    glVertex3f(-1.0, 0.0, -1.0)
+    glVertex3f(0.0, 3.0, 0.0)
 
-    glBegin(GL_LINES)
-    for edge in edges_triangle:
-        for vertex in edge:
-            glVertex3fv(verticies_triangle[vertex])
+    glColor3f(0.843, 0.992, 0.925)  # D7FDEC
+    glVertex3f(-1.0, 0.0, 1.0)
+    glVertex3f(1.0, 0.0, 0.0)
+    glVertex3f(0.0, 3.0, 0.0)
+
+    glColor3f(0.663, 0.984, 0.843),  # A9FBD7
+    glVertex3f(-1.0, 0.0, -1.0)
+    glVertex3f(1.0, 0.0, 0.0)
+    glVertex3f(0.0, 3.0, 0.0)
+
+    # for surface in surfaces_triangle:
+    #     x = 0
+    #     for vertex in surface:
+    #         x += 1
+    #         glColor3fv(colors[x])  # colour, rgb
+    #         glVertex3fv(verticies_triangle[vertex])
+    #
+    # glEnd()
+    #
+    # glBegin(GL_LINES)
+    # for edge in edges_triangle:
+    #     for vertex in edge:
+    #         glVertex3fv(verticies_triangle[vertex])
 
     glEnd()
 
@@ -329,13 +349,15 @@ if __name__ == "__main__":
             glTranslatef(1, 0, 0)
             print("GESTUTRE ", gesture)
         elif gesture == "clock":
-            #glRotatef(25, -1, -1, -1)
-            glRotatef(30, 0, 0, -1)
+            #glRotatef(25, -1, -1, -1) #all axis
+            # glRotatef(30, 0, -1, 0)  # only y
+            glRotatef(30, 0, 0, -1) # only x
+            #glRotatef(30, 0, -1, 0)  # only y
             print("GESTUTRE ", gesture)
         elif gesture == "counter":
             #glRotatef(25, 1, 1, 1) #all axis
-            glRotatef(30, 0, 1, 0) # only y
             #glRotatef(30, 0, 0, 1)  # only x
+            glRotatef(30, 0, 1, 0)  # only y
             print("GESTUTRE ", gesture)
 
         # FOR WHEN WE HAVE ALL GESTURES
@@ -370,7 +392,6 @@ if __name__ == "__main__":
             Triangle()
             currentShape = 'Triangle'
         elif changeCount % 2 == 0:
-            #glEnable(GL_DEPTH_TEST)
             Cube()
             currentShape = 'Cube'
 
