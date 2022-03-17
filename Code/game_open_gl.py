@@ -6,9 +6,8 @@ from OpenGL.GLU import *
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import db
-from threading import Thread, Lock
-
-# import threading
+# from threading import Thread, Lock
+import threading
 
 # Connect to Firebase
 cred = credentials.Certificate(
@@ -19,9 +18,8 @@ default_app = firebase_admin.initialize_app(cred, {
 })
 
 gesture_ref = firebase_admin.db.reference('/Prediction/Gesture')
+lock = threading.Lock()
 
-
-# lock = threading.Lock()
 
 def resetShape():
     if currentShape == 'Cube':
@@ -55,14 +53,24 @@ gesture_listener = firebase_admin.db.reference('/Prediction').listen(listener)
 
 # a cube has 8 verticies
 verticies_cube = (
-    (1, -1, -1),  # coordinates of node 0
-    (1, 1, -1),
-    (-1, 1, -1),
-    (-1, -1, -1),
-    (1, -1, 1),
+    # (1, -1, -1),  # coordinates of node 0
+    # (1, 1, -1),
+    # (-1, 1, -1),
+    # (-1, -1, -1),
+    # (1, -1, 1),
+    # (1, 1, 1),
+    # (-1, -1, 1),
+    # (-1, 1, 1),
+
+    #VERTICES FOR SOLID CUBE WITH DIFFERENT COLOURS ON EACH PHASE
     (1, 1, 1),
+    (1, -1, 1),
     (-1, -1, 1),
     (-1, 1, 1),
+    (1, 1, -1),
+    (1, -1, -1),
+    (-1, -1, -1),
+    (-1, 1, -1),
 
 )
 
@@ -73,7 +81,7 @@ verticies_triangle = (
     (0, 3, 0),
 )
 
-# an edge ( i.e. cnxn between two nodes)
+#NOT NEEDED FOR NEW CUBE
 edges_cube = (
 
     (0, 1),  # node 0 connected to node 1
@@ -104,12 +112,20 @@ edges_triangle = (
 
 # surfaces of the cube
 surfaces = (
-    (0, 1, 2, 3),  # surface connecting node 0,1,2,3
-    (3, 2, 7, 6),
-    (6, 7, 5, 4),
+    # (0, 1, 2, 3),  # surface connecting node 0,1,2,3
+    # (3, 2, 7, 6),
+    # (6, 7, 5, 4),
+    # (4, 5, 1, 0),
+    # (1, 5, 7, 2),
+    # (4, 0, 3, 6),
+
+    #SURFACES FOR SOLID CUBE WITH DIFFERENT COLOURS ON EACH PHASE
+    (0, 1, 2, 3),
     (4, 5, 1, 0),
-    (1, 5, 7, 2),
-    (4, 0, 3, 6),
+    (0, 1, 5, 4),
+    (3, 2, 6, 7),
+    (0, 3, 7, 4),
+    (1, 2, 6, 5),
 )
 
 surfaces_triangle = (
@@ -121,18 +137,47 @@ surfaces_triangle = (
 
 # colours
 colors = (
-    (1, 0, 0),
-    (0, 1, 0),
-    (0, 0, 1),
-    (0, 0, 0),
-    (1, 1, 1),
-    (0, 1, 1),
-    (1, 0, 0),
-    (0, 1, 0),
-    (0, 0, 1),
-    (0, 0, 0),
-    (1, 1, 1),
-    (0, 1, 1),
+    # (1, 0, 0),
+    # (0, 1, 0),
+    # (0, 0, 1),
+    # (0, 0, 0),
+    # (1, 1, 1),
+    # (0, 1, 1),
+    # (1, 0, 0),
+    # (0, 1, 0),
+    # (0, 0, 1),
+    # (0, 0, 0),
+    # (1, 1, 1),
+    # (0, 1, 1),
+
+    ##############
+    #GHAITH COLOURS -> OLD CUBE
+    # (1, 1, 0),  # yellow
+    # (0, 1, 0),  # green
+    # (0.75, 0.38, 0),  # Orange
+    # (1, 1, 1),  # white
+    # (0.9, 0, 0),  # Red
+    # (0, 0, 1)  # Blue
+    ########
+
+    #DIFFERENT COLOURS ON EACH PHASE
+    # (1, 0, 1),
+    # (1, 1, 0),
+    # (0, 1, 1),
+    # (1, 0, 0),
+    # (0, 0, 1),
+    # (0, 1, 0),
+    # (1, 1, 1),
+    (1, 0, 0), # red
+    (1, 0, 0), # red
+    (0.612, 0.925, 0.357), # 9CEC5B
+    (0.843, 0.992, 0.925),  # D7FDEC
+    (0.663, 0.984, 0.843),  # A9FBD7
+    (0.698, 0.894, 0.859),  # B2E4DB
+    (0.690, 0.776, 0.808),  # B0C6CE
+    (0, 0, 1), # blue
+    #(0.576, 0.545, 0.631),   # 938BA1
+
 )
 
 
@@ -140,20 +185,32 @@ colors = (
 # everytime we do gl code/object, we have to encase it with glBegin and glEnd
 def Cube():
     glBegin(GL_QUADS)
+    x = 0
     for surface in surfaces:
-        x = 0
-
+        #x = 0
+        x += 1
+        #glColor3fv(colors[x])
         for vertex in surface:
-            x += 2
+
+            # for original colour matrix
+            # x += 2
+            #
+            # # for green/red matrix
+            # x += 1
             glColor3fv(colors[x])  # colour, rgb
+
             glVertex3fv(verticies_cube[vertex])
     glEnd()
 
-    glBegin(GL_LINES)  # here we notify opengl what kindof graphics we are putting here (consant)
-    for edge in edges_cube:
-        for vertex in edge:
-            glVertex3fv(verticies_cube[vertex])  # basically drawing the vertices and connecting them
-    glEnd()  # this one stays empty
+    #NOT NEEDED FOR NEW CUBE
+    # glBegin(GL_LINES)  # here we notify opengl what kindof graphics we are putting here (consant)
+
+    # for edge in edges_cube:
+    #     x += 1
+    #     glColor3fv(colors[x])
+    #     for vertex in edge:
+    #         glVertex3fv(verticies_cube[vertex])  # basically drawing the vertices and connecting them
+    # glEnd()  # this one stays empty
 
 
 def Triangle():
@@ -187,26 +244,21 @@ if __name__ == "__main__":
     # global gesture
 
     # ADDED THESE WHEN CHANGED FROM main() TO "__main__"
-    lock = Lock()
+    # lock = Lock()
     changeCount = 0
-    currentShape = ''
+    # currentShape = ''
     gesture = ""
-    currentMatrix = ""
 
     pygame.init()  # pygame initialization
     display = (800, 600)
     screen = pygame.display.set_mode(display, DOUBLEBUF | OPENGL)  # we have to tell pygame we r using opengl
+    glEnable(GL_DEPTH_TEST)
 
     # (field of view, aspect ratio=width/height, clipping planes = plane tht clips away showimng the object
     # ie when u zoom out a lot it's going to disapear, 0,1 then 50 is pretty wide)
     gluPerspective(45, (display[0] / display[1]), 0.1, 50.0)
-
     glTranslatef(0.0, 0.0, -10)  # x-y-z parameters, us moving about the objet
     glRotatef(25, 2, 1, 0)  # (degree,x,y,z)
-
-    # ADDED THREAD T1 & START WHEN CHAINED main() TO "__main__"
-    t1 = Thread(target=getGesture, args=(lock,))
-    t1.start()
 
     while True:
         for event in pygame.event.get():
@@ -232,12 +284,13 @@ if __name__ == "__main__":
             glTranslatef(1, 0, 0)
             print("GESTUTRE ", gesture)
         elif gesture == "clock":
-            # glRotatef(25, -1, -1, -1)
-            glRotatef(30, 0, 0, -1)
+            glRotatef(25, -1, -1, -1)
+            #glRotatef(30, 0, 0, -1)
             print("GESTUTRE ", gesture)
         elif gesture == "counter":
-            # glRotatef(25, 1, 1, 1)
-            glRotatef(30, 0, 0, 1)  # only x
+            #glRotatef(25, 1, 1, 1) #all axis
+            glRotatef(30, 0, 1, 0) # only y
+            #glRotatef(30, 0, 0, 1)  # only x
             print("GESTUTRE ", gesture)
 
         # FOR WHEN WE HAVE ALL GESTURES
@@ -255,7 +308,11 @@ if __name__ == "__main__":
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
         # colour of background
-        glClearColor(0.7, 0.8, 0.88, 1)  # (red, green, blue, alpha)
+        #glClearColor(0.7, 0.8, 0.88, 1)  # (red, green, blue, alpha)
+        #glClearColor(1, 1, 1, 1)
+        #glClearColor(0.576, 0.545, 0.631,0)  # 938BA1
+        #glClearColor(128, 128, 128, 1) #grey
+        glClearColor(192, 192, 192, 0)
         glClear(GL_COLOR_BUFFER_BIT)
 
         # Changing Shapes
@@ -268,9 +325,6 @@ if __name__ == "__main__":
 
         pygame.display.flip()  # an alternative could be display.update()
         pygame.time.wait(10)  # in ms
-
-    # JOINING THREAD
-    t1.join()
 
 # if __name__ == "__main__":
 #     main()
