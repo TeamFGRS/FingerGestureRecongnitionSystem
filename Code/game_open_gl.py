@@ -3,6 +3,7 @@ from pygame.locals import *
 from turtle import *
 from OpenGL.GL import *
 from OpenGL.GLU import *
+from OpenGL.GLUT import *
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import db
@@ -168,8 +169,9 @@ colors = (
     # (0, 0, 1),
     # (0, 1, 0),
     # (1, 1, 1),
-    (1, 0, 0), # red
-    (1, 0, 0), # red
+    #(1, 0, 0), # red
+    #(1, 0, 0), # red
+    (0.714, 0.839, 0.89), #b6d6e3 -> pretty blue
     (0.612, 0.925, 0.357), # 9CEC5B
     (0.843, 0.992, 0.925),  # D7FDEC
     (0.663, 0.984, 0.843),  # A9FBD7
@@ -185,23 +187,66 @@ colors = (
 # everytime we do gl code/object, we have to encase it with glBegin and glEnd
 def Cube():
     glBegin(GL_QUADS)
-    x = 0
-    for surface in surfaces:
-        #x = 0
-        x += 1
-        #glColor3fv(colors[x])
-        for vertex in surface:
+    #glColor3f(0.0, 1.0, 0.0)
+    glColor3f(0.714, 0.839, 0.89) #b6d6e3
+    glVertex3f(1.0, 1.0, -1.0)
+    glVertex3f(-1.0, 1.0, -1.0)
+    glVertex3f(-1.0, 1.0, 1.0)
+    glVertex3f(1.0, 1.0, 1.0)
 
-            # for original colour matrix
-            # x += 2
-            #
-            # # for green/red matrix
-            # x += 1
-            glColor3fv(colors[x])  # colour, rgb
+    #glColor3f(1.0, 0.0, 0.0)
+    glColor3f(0.612, 0.925, 0.357) # 9CEC5B
+    glVertex3f(1.0, -1.0, 1.0)
+    glVertex3f(-1.0, -1.0, 1.0)
+    glVertex3f(-1.0, -1.0, -1.0)
+    glVertex3f(1.0, -1.0, -1.0)
 
-            glVertex3fv(verticies_cube[vertex])
+    #glColor3f(0.0, 1.0, 0.0)
+    glColor3f(0.843, 0.992, 0.925) # D7FDEC
+    glVertex3f(1.0, 1.0, 1.0)
+    glVertex3f(-1.0, 1.0, 1.0)
+    glVertex3f(-1.0, -1.0, 1.0)
+    glVertex3f(1.0, -1.0, 1.0)
+
+    #glColor3f(1.0, 1.0, 0.0)
+    glColor3f(0.663, 0.984, 0.843),  # A9FBD7
+    glVertex3f(1.0, -1.0, -1.0)
+    glVertex3f(-1.0, -1.0, -1.0)
+    glVertex3f(-1.0, 1.0, -1.0)
+    glVertex3f(1.0, 1.0, -1.0)
+
+    #glColor3f(0.0, 0.0, 1.0)
+    glColor3f(0.698, 0.894, 0.859),  # B2E4DB
+    glVertex3f(-1.0, 1.0, 1.0)
+    glVertex3f(-1.0, 1.0, -1.0)
+    glVertex3f(-1.0, -1.0, -1.0)
+    glVertex3f(-1.0, -1.0, 1.0)
+
+    #glColor3f(1.0, 0.0, 1.0)
+    glColor3f(0.690, 0.776, 0.808),  # B0C6CE
+    glVertex3f(1.0, 1.0, -1.0)
+    glVertex3f(1.0, 1.0, 1.0)
+    glVertex3f(1.0, -1.0, 1.0)
+    glVertex3f(1.0, -1.0, -1.0)
+
     glEnd()
 
+    # NOT NEEDED F0R NEW NEW CUBE
+    # x = 0
+    # for surface in surfaces:
+    #     #x = 0
+    #     x += 1
+    #     #glColor3fv(colors[x])
+    #     for vertex in surface:
+    #
+    #         # for original colour matrix
+    #         # x += 2
+    #         #
+    #         # # for green/red matrix
+    #         # x += 1
+    #         #glDisable(GL_CULL_FACE)
+    #         glColor3fv(colors[x])  # colour, rgb
+    #         glVertex3fv(verticies_cube[vertex])
     #NOT NEEDED FOR NEW CUBE
     # glBegin(GL_LINES)  # here we notify opengl what kindof graphics we are putting here (consant)
 
@@ -284,8 +329,8 @@ if __name__ == "__main__":
             glTranslatef(1, 0, 0)
             print("GESTUTRE ", gesture)
         elif gesture == "clock":
-            glRotatef(25, -1, -1, -1)
-            #glRotatef(30, 0, 0, -1)
+            #glRotatef(25, -1, -1, -1)
+            glRotatef(30, 0, 0, -1)
             print("GESTUTRE ", gesture)
         elif gesture == "counter":
             #glRotatef(25, 1, 1, 1) #all axis
@@ -307,12 +352,17 @@ if __name__ == "__main__":
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
-        # colour of background
+        # BACKGROUND COLOUR
         #glClearColor(0.7, 0.8, 0.88, 1)  # (red, green, blue, alpha)
-        #glClearColor(1, 1, 1, 1)
+        #glClearColor(0, 0, 0, 1) # black
+        glClearColor(1, 1, 1, 1) # white -> POSSIBILITY
         #glClearColor(0.576, 0.545, 0.631,0)  # 938BA1
-        #glClearColor(128, 128, 128, 1) #grey
-        glClearColor(192, 192, 192, 0)
+        #glClearColor(0.502, 0.502, 0.502, 1) #808080 grey
+        #glClearColor(0.792, 0.808, 0.812, 1) #cacecf light grey
+        #glClearColor(0.753, 0.753, 0.753, 0) #C0C0C0 silver
+        #glClearColor(0.753, 0.824, 0.851, 1) # c0d2d9 -> light blue: POSSIBILITY
+        #glClearColor(0.953, 1, 1, 1) # f3ffff -> twilight : POSSIBILITY
+
         glClear(GL_COLOR_BUFFER_BIT)
 
         # Changing Shapes
@@ -320,8 +370,10 @@ if __name__ == "__main__":
             Triangle()
             currentShape = 'Triangle'
         elif changeCount % 2 == 0:
+            #glEnable(GL_DEPTH_TEST)
             Cube()
             currentShape = 'Cube'
+
 
         pygame.display.flip()  # an alternative could be display.update()
         pygame.time.wait(10)  # in ms
