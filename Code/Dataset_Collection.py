@@ -22,7 +22,7 @@ directory = "../DataSet3/counter.csv"
 
 lock = threading.Lock()
 detectionCounter = 0
-testCounter = 1
+testCounter = 62
 test1 = 0
 test2 = 0
 test3 = 0
