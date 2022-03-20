@@ -1,8 +1,3 @@
-import statistics
-
-import pandas as pd
-import numpy
-
 def feature_extraction(data_frame, test_type):
 
     grouped = data_frame.groupby(data_frame["TEST"])
