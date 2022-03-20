@@ -101,6 +101,25 @@ def feature_extraction(data_frame, test_type):
 
         return std_df
 
+    # def mode(data_group):
+    #     mode_df = data_group.mode(axis='columns', numeric_only=True)
+    #     mode_df_2 = mode_df.reset_index(drop=True)
+    #     mode_df_3 = mode_df_2.set_axis(
+    #         ['ACC-X-MODE-Ring1', 'ACC-Y-MODE-Ring1', 'ACC-Z-MODE-Ring1', 'GYRO-X-MODE-Ring1', 'GYRO-Y-MODE-Ring1',
+    #          'GYRO-Z-MODE-Ring1', 'ACC-X-MODE-Ring2', 'ACC-Y-MODE-Ring2', 'ACC-Z-MODE-Ring2', 'GYRO-X-MODE-Ring2',
+    #          'GYRO-Y-MODE-Ring2', 'GYRO-Z-MODE-Ring2', 'ACC-X-MODE-Ring3', 'ACC-Y-MODE-Ring3', 'ACC-Z-MODE-Ring3',
+    #          'GYRO-X-MODE-Ring3', 'GYRO-Y-MODE-Ring3', 'GYRO-Z-MODE-Ring3'],
+    #         axis=1, inplace=False)
+    #
+    #     return mode_df_3
+    #
+    # def mode_df():
+    #     mode_df = mode(grouped.get_group(1).drop(columns="TEST"))
+    #
+    #     for group in range(grouped.ngroups - 1):
+    #         mode_df = mode_df.append(mode(grouped.get_group(group + 2).drop(columns="TEST")), ignore_index=True)
+    #
+    #     return mode_df
 
     def variance(data_group):
         var_df = data_group.var(ddof=0).to_frame().transpose()
