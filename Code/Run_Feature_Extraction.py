@@ -17,6 +17,12 @@ fingerRight = read_file('../DataSet3/right.csv')
 fingerClock = read_file('../DataSet3/clock.csv')
 # 90 deg counter data frame
 fingerCounter = read_file('../DataSet3/counter.csv')
+# snap data frame
+fingerSnap = read_file('../DataSet3/snap.csv')
+# pinch in data frame
+fingerPIn = read_file('../DataSet3/pinch_in.csv')
+# pinch out data frame
+fingerPOut = read_file('../DataSet3/pinch_out.csv')
 
 # run feature extraction
 up_df = feature_extraction(fingerUp, "up")
@@ -25,9 +31,13 @@ right_df = feature_extraction(fingerRight, "right")
 left_df = feature_extraction(fingerLeft, "left")
 clock_df = feature_extraction(fingerClock, "clock")
 counter_df = feature_extraction(fingerCounter, "counter")
+snap_df = feature_extraction(fingerSnap, "snap")
+pin_df = feature_extraction(fingerPIn, "pinch_in")
+pout_df = feature_extraction(fingerPOut, "pinch_out")
+
 
 # merge features into one data frame
-f_df = dataframe_merging(up_df, down_df, right_df, left_df, clock_df, counter_df)
+f_df = dataframe_merging(up_df, down_df, right_df, left_df, clock_df, counter_df, snap_df, pin_df, pout_df)
 
 # store into file
 df_to_csv(f_df, "../DataSet3/extracted_features.csv")
