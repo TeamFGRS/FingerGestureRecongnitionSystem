@@ -2,35 +2,35 @@ import pandas as pd
 
 
 def RT_FE(grouped):
-    def minimum(data_group):
-        min_df = data_group.min().to_frame().transpose()
-        min_df_2 = min_df.reset_index(drop=True)
-        min_df_3 = min_df_2.set_axis(
-            ['ACC-X-MIN-Ring1', 'ACC-Y-MIN-Ring1', 'ACC-Z-MIN-Ring1', 'GYRO-X-MIN-Ring1', 'GYRO-Y-MIN-Ring1',
-             'GYRO-Z-MIN-Ring1', 'ACC-X-MIN-Ring2', 'ACC-Y-MIN-Ring2', 'ACC-Z-MIN-Ring2', 'GYRO-X-MIN-Ring2',
-             'GYRO-Y-MIN-Ring2', 'GYRO-Z-MIN-Ring2', 'ACC-X-MIN-Ring3', 'ACC-Y-MIN-Ring3', 'ACC-Z-MIN-Ring3',
-             'GYRO-X-MIN-Ring3', 'GYRO-Y-MIN-Ring3', 'GYRO-Z-MIN-Ring3'],
-            axis=1, inplace=False)
-        return min_df_3
-
-    def min_df():
-        min_df = minimum(grouped.drop(columns="TEST"))
-        return min_df
-
-    def maximum(data_group):
-        max_df = data_group.max().to_frame().transpose()
-        max_df_2 = max_df.reset_index(drop=True)
-        max_df_3 = max_df_2.set_axis(
-            ['ACC-X-MAX-Ring1', 'ACC-Y-MAX-Ring1', 'ACC-Z-MAX-Ring1', 'GYRO-X-MAX-Ring1', 'GYRO-Y-MAX-Ring1',
-             'GYRO-Z-MAX-Ring1', 'ACC-X-MAX-Ring2', 'ACC-Y-MAX-Ring2', 'ACC-Z-MAX-Ring2', 'GYRO-X-MAX-Ring2',
-             'GYRO-Y-MAX-Ring2', 'GYRO-Z-MAX-Ring2', 'ACC-X-MAX-Ring3', 'ACC-Y-MAX-Ring3', 'ACC-Z-MAX-Ring3',
-             'GYRO-X-MAX-Ring3', 'GYRO-Y-MAX-Ring3', 'GYRO-Z-MAX-Ring3'],
-            axis=1, inplace=False)
-        return max_df_3
-
-    def max_df():
-        max_df = maximum(grouped.drop(columns="TEST"))
-        return max_df
+    # def minimum(data_group):
+    #     min_df = data_group.min().to_frame().transpose()
+    #     min_df_2 = min_df.reset_index(drop=True)
+    #     min_df_3 = min_df_2.set_axis(
+    #         ['ACC-X-MIN-Ring1', 'ACC-Y-MIN-Ring1', 'ACC-Z-MIN-Ring1', 'GYRO-X-MIN-Ring1', 'GYRO-Y-MIN-Ring1',
+    #          'GYRO-Z-MIN-Ring1', 'ACC-X-MIN-Ring2', 'ACC-Y-MIN-Ring2', 'ACC-Z-MIN-Ring2', 'GYRO-X-MIN-Ring2',
+    #          'GYRO-Y-MIN-Ring2', 'GYRO-Z-MIN-Ring2', 'ACC-X-MIN-Ring3', 'ACC-Y-MIN-Ring3', 'ACC-Z-MIN-Ring3',
+    #          'GYRO-X-MIN-Ring3', 'GYRO-Y-MIN-Ring3', 'GYRO-Z-MIN-Ring3'],
+    #         axis=1, inplace=False)
+    #     return min_df_3
+    #
+    # def min_df():
+    #     min_df = minimum(grouped.drop(columns="TEST"))
+    #     return min_df
+    #
+    # def maximum(data_group):
+    #     max_df = data_group.max().to_frame().transpose()
+    #     max_df_2 = max_df.reset_index(drop=True)
+    #     max_df_3 = max_df_2.set_axis(
+    #         ['ACC-X-MAX-Ring1', 'ACC-Y-MAX-Ring1', 'ACC-Z-MAX-Ring1', 'GYRO-X-MAX-Ring1', 'GYRO-Y-MAX-Ring1',
+    #          'GYRO-Z-MAX-Ring1', 'ACC-X-MAX-Ring2', 'ACC-Y-MAX-Ring2', 'ACC-Z-MAX-Ring2', 'GYRO-X-MAX-Ring2',
+    #          'GYRO-Y-MAX-Ring2', 'GYRO-Z-MAX-Ring2', 'ACC-X-MAX-Ring3', 'ACC-Y-MAX-Ring3', 'ACC-Z-MAX-Ring3',
+    #          'GYRO-X-MAX-Ring3', 'GYRO-Y-MAX-Ring3', 'GYRO-Z-MAX-Ring3'],
+    #         axis=1, inplace=False)
+    #     return max_df_3
+    #
+    # def max_df():
+    #     max_df = maximum(grouped.drop(columns="TEST"))
+    #     return max_df
 
     def median(data_group):
         median_df = data_group.median().to_frame().transpose()
@@ -47,20 +47,20 @@ def RT_FE(grouped):
         median_df = median(grouped.drop(columns="TEST"))
         return median_df
 
-    def mean(data_group):
-        mean_df = data_group.mean().to_frame().transpose()
-        mean_df_2 = mean_df.reset_index(drop=True)
-        mean_df_3 = mean_df_2.set_axis(
-            ['ACC-X-MEAN-Ring1', 'ACC-Y-MEAN-Ring1', 'ACC-Z-MEAN-Ring1', 'GYRO-X-MEAN-Ring1', 'GYRO-Y-MEAN-Ring1',
-             'GYRO-Z-MEAN-Ring1', 'ACC-X-MEAN-Ring2', 'ACC-Y-MEAN-Ring2', 'ACC-Z-MEAN-Ring2', 'GYRO-X-MEAN-Ring2',
-             'GYRO-Y-MEAN-Ring2', 'GYRO-Z-MEAN-Ring2', 'ACC-X-MEAN-Ring3', 'ACC-Y-MEAN-Ring3', 'ACC-Z-MEAN-Ring3',
-             'GYRO-X-MEAN-Ring3', 'GYRO-Y-MEAN-Ring3', 'GYRO-Z-MEAN-Ring3'],
-            axis=1, inplace=False)
-        return mean_df_3
-
-    def mean_df():
-        mean_df = mean(grouped.drop(columns="TEST"))
-        return mean_df
+    # def mean(data_group):
+    #     mean_df = data_group.mean().to_frame().transpose()
+    #     mean_df_2 = mean_df.reset_index(drop=True)
+    #     mean_df_3 = mean_df_2.set_axis(
+    #         ['ACC-X-MEAN-Ring1', 'ACC-Y-MEAN-Ring1', 'ACC-Z-MEAN-Ring1', 'GYRO-X-MEAN-Ring1', 'GYRO-Y-MEAN-Ring1',
+    #          'GYRO-Z-MEAN-Ring1', 'ACC-X-MEAN-Ring2', 'ACC-Y-MEAN-Ring2', 'ACC-Z-MEAN-Ring2', 'GYRO-X-MEAN-Ring2',
+    #          'GYRO-Y-MEAN-Ring2', 'GYRO-Z-MEAN-Ring2', 'ACC-X-MEAN-Ring3', 'ACC-Y-MEAN-Ring3', 'ACC-Z-MEAN-Ring3',
+    #          'GYRO-X-MEAN-Ring3', 'GYRO-Y-MEAN-Ring3', 'GYRO-Z-MEAN-Ring3'],
+    #         axis=1, inplace=False)
+    #     return mean_df_3
+    #
+    # def mean_df():
+    #     mean_df = mean(grouped.drop(columns="TEST"))
+    #     return mean_df
 
     def standard_deviation(data_group):
         std_df = data_group.std(ddof=0).to_frame().transpose()
@@ -123,6 +123,6 @@ def RT_FE(grouped):
         kurt_df = kurtosis(grouped.drop(columns="TEST"))
         return kurt_df
 
-    c_df = min_df().join(max_df()).join(median_df()).join(mean_df()).join(standard_deviation_df()).join(variance_df()).join(skewness_df()).join(kurtosis_df())
+    c_df = median_df().join(standard_deviation_df()).join(variance_df()).join(skewness_df()).join(kurtosis_df())
 
     return c_df
