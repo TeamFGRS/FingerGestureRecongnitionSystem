@@ -13,9 +13,8 @@ default_app = firebase_admin.initialize_app(cred, {
     'databaseURL': "https://fingergesturerecognitionsystem-default-rtdb.firebaseio.com/"
 })
 
-headers = ['ACC-X-Ring1', 'ACC-Y-Ring1', 'ACC-Z-Ring1', 'GYRO-X-Ring1', 'GYRO-Y-Ring1', 'GYRO-Z-Ring1', 'ACC-X-Ring2',
-           'ACC-Y-Ring2', 'ACC-Z-Ring2', 'GYRO-X-Ring2', 'GYRO-Y-Ring2', 'GYRO-Z-Ring2', 'ACC-X-Ring3', 'ACC-Y-Ring3',
-           'ACC-Z-Ring3', 'GYRO-X-Ring3', 'GYRO-Y-Ring3', 'GYRO-Z-Ring3', 'TEST']
+headers = ['GYRO-X-Ring1', 'GYRO-Y-Ring1', 'GYRO-Z-Ring1', 'GYRO-X-Ring2', 'GYRO-Y-Ring2', 'GYRO-Z-Ring2',
+           'GYRO-X-Ring3', 'GYRO-Y-Ring3', 'GYRO-Z-Ring3', 'TEST']
 df = pd.DataFrame(columns=headers)
 
 directory = "../DataSet3/right.csv"
@@ -97,55 +96,55 @@ def listener(event):
     elif event.path == "/Ring1/ACC-X":
         del event.data[0]
         print("ACC-X-Ring1: ", str(event.data))
-        df['ACC-X-Ring1'] = event.data
+        # df['ACC-X-Ring1'] = event.data
         update_counter()
 
     elif event.path == "/Ring2/ACC-X":
         del event.data[0]
         print("ACC-X-Ring2: ", str(event.data))
-        df['ACC-X-Ring2'] = event.data
+        # df['ACC-X-Ring2'] = event.data
         update_counter()
 
     elif event.path == "/Ring3/ACC-X":
         del event.data[0]
         print("ACC-X-Ring3: ", str(event.data))
-        df['ACC-X-Ring3'] = event.data
+        # df['ACC-X-Ring3'] = event.data
         update_counter()
 
     elif event.path == "/Ring1/ACC-Y":
         del event.data[0]
         print("ACC-Y-Ring1: ", str(event.data))
-        df['ACC-Y-Ring1'] = event.data
+        # df['ACC-Y-Ring1'] = event.data
         update_counter()
 
     elif event.path == "/Ring2/ACC-Y":
         del event.data[0]
         print("ACC-Y-Ring2: ", str(event.data))
-        df['ACC-Y-Ring2'] = event.data
+        # df['ACC-Y-Ring2'] = event.data
         update_counter()
 
     elif event.path == "/Ring3/ACC-Y":
         del event.data[0]
         print("ACC-Y-Ring3: ", str(event.data))
-        df['ACC-Y-Ring3'] = event.data
+        # df['ACC-Y-Ring3'] = event.data
         update_counter()
 
     elif event.path == "/Ring1/ACC-Z":
         del event.data[0]
         print("ACC-Z-Ring1: ", str(event.data))
-        df['ACC-Z-Ring1'] = event.data
+        # df['ACC-Z-Ring1'] = event.data
         update_counter()
 
     elif event.path == "/Ring2/ACC-Z":
         del event.data[0]
         print("ACC-Z-Ring2: ", str(event.data))
-        df['ACC-Z-Ring2'] = event.data
+        # df['ACC-Z-Ring2'] = event.data
         update_counter()
 
     elif event.path == "/Ring3/ACC-Z":
         del event.data[0]
         print("ACC-Z-Ring3: ", str(event.data))
-        df['ACC-Z-Ring3'] = event.data
+        # df['ACC-Z-Ring3'] = event.data
         update_counter()
 
     elif event.path == "/Ring1/GYRO-X":
