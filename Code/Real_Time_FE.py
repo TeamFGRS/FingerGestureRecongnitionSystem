@@ -32,6 +32,21 @@ def RT_FE(grouped):
         max_df = maximum(grouped.drop(columns="TEST"))
         return max_df
 
+    def median(data_group):
+        median_df = data_group.median().to_frame().transpose()
+        median_df_2 = median_df.reset_index(drop=True)
+        median_df_3 = median_df_2.set_axis(
+            ['ACC-X-MED-Ring1', 'ACC-Y-MED-Ring1', 'ACC-Z-MED-Ring1', 'GYRO-X-MED-Ring1', 'GYRO-Y-MED-Ring1',
+             'GYRO-Z-MED-Ring1', 'ACC-X-MED-Ring2', 'ACC-Y-MED-Ring2', 'ACC-Z-MED-Ring2', 'GYRO-X-MED-Ring2',
+             'GYRO-Y-MED-Ring2', 'GYRO-Z-MED-Ring2', 'ACC-X-MED-Ring3', 'ACC-Y-MED-Ring3', 'ACC-Z-MED-Ring3',
+             'GYRO-X-MED-Ring3', 'GYRO-Y-MED-Ring3', 'GYRO-Z-MED-Ring3'],
+            axis=1, inplace=False)
+        return median_df_3
+
+    def median_df():
+        median_df = median(grouped.drop(columns="TEST"))
+        return median_df
+
     def mean(data_group):
         mean_df = data_group.mean().to_frame().transpose()
         mean_df_2 = mean_df.reset_index(drop=True)
@@ -46,6 +61,22 @@ def RT_FE(grouped):
     def mean_df():
         mean_df = mean(grouped.drop(columns="TEST"))
         return mean_df
+
+    def standard_deviation(data_group):
+        std_df = data_group.std(ddof=0).to_frame().transpose()
+        std_df_2 = std_df.reset_index(drop=True)
+        std_df_3 = std_df_2.set_axis(
+            ['ACC-X-STD-Ring1', 'ACC-Y-STD-Ring1', 'ACC-Z-STD-Ring1', 'GYRO-X-STD-Ring1', 'GYRO-Y-STD-Ring1',
+             'GYRO-Z-STD-Ring1', 'ACC-X-STD-Ring2', 'ACC-Y-STD-Ring2', 'ACC-Z-STD-Ring2', 'GYRO-X-STD-Ring2',
+             'GYRO-Y-STD-Ring2', 'GYRO-Z-STD-Ring2', 'ACC-X-STD-Ring3', 'ACC-Y-STD-Ring3', 'ACC-Z-STD-Ring3',
+             'GYRO-X-STD-Ring3', 'GYRO-Y-STD-Ring3', 'GYRO-Z-STD-Ring3'],
+            axis=1, inplace=False)
+        return std_df_3
+
+    def standard_deviation_df():
+        std_df = standard_deviation(grouped.drop(columns="TEST"))
+
+        return std_df
 
     def variance(data_group):
         var_df = data_group.var(ddof=0).to_frame().transpose()
@@ -92,6 +123,6 @@ def RT_FE(grouped):
         kurt_df = kurtosis(grouped.drop(columns="TEST"))
         return kurt_df
 
-    c_df = min_df().join(max_df()).join(mean_df()).join(variance_df()).join(skewness_df()).join(kurtosis_df())
+    c_df = min_df().join(max_df()).join(median_df()).join(mean_df()).join(standard_deviation_df()).join(variance_df()).join(skewness_df()).join(kurtosis_df())
 
     return c_df
