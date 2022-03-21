@@ -1,6 +1,3 @@
-import pandas as pd
-
-
 def feature_extraction(data_frame, test_type):
 
     grouped = data_frame.groupby(data_frame["TEST"])
@@ -42,6 +39,25 @@ def feature_extraction(data_frame, test_type):
             # max_df = pd.concat()
         return max_df
 
+    def median(data_group):
+        median_df = data_group.median().to_frame().transpose()
+        median_df_2 = median_df.reset_index(drop=True)
+        median_df_3 = median_df_2.set_axis(
+            ['ACC-X-MED-Ring1', 'ACC-Y-MED-Ring1', 'ACC-Z-MED-Ring1', 'GYRO-X-MED-Ring1', 'GYRO-Y-MED-Ring1',
+             'GYRO-Z-MED-Ring1', 'ACC-X-MED-Ring2', 'ACC-Y-MED-Ring2', 'ACC-Z-MED-Ring2', 'GYRO-X-MED-Ring2',
+             'GYRO-Y-MED-Ring2', 'GYRO-Z-MED-Ring2', 'ACC-X-MED-Ring3', 'ACC-Y-MED-Ring3', 'ACC-Z-MED-Ring3',
+             'GYRO-X-MED-Ring3', 'GYRO-Y-MED-Ring3', 'GYRO-Z-MED-Ring3'],
+            axis=1, inplace=False)
+        return median_df_3
+
+    def median_df():
+        median_df = median(grouped.get_group(1).drop(columns="TEST"))
+        # print(min_df)
+        for group in range(grouped.ngroups - 1):
+            median_df = median_df.append(median(grouped.get_group(group + 2).drop(columns="TEST")), ignore_index=True)
+            # max_df = pd.concat()
+        return median_df
+
     def mean(data_group):
         mean_df = data_group.mean().to_frame().transpose()
         mean_df_2 = mean_df.reset_index(drop=True)
@@ -60,6 +76,45 @@ def feature_extraction(data_frame, test_type):
             mean_df = mean_df.append(mean(grouped.get_group(group + 2).drop(columns="TEST")), ignore_index=True)
             # max_df = pd.concat()
         return mean_df
+
+    def standard_deviation(data_group):
+        std_df = data_group.std(ddof=0).to_frame().transpose()
+        std_df_2 = std_df.reset_index(drop=True)
+        std_df_3 = std_df_2.set_axis(
+            ['ACC-X-STD-Ring1', 'ACC-Y-STD-Ring1', 'ACC-Z-STD-Ring1', 'GYRO-X-STD-Ring1', 'GYRO-Y-STD-Ring1',
+             'GYRO-Z-STD-Ring1', 'ACC-X-STD-Ring2', 'ACC-Y-STD-Ring2', 'ACC-Z-STD-Ring2', 'GYRO-X-STD-Ring2',
+             'GYRO-Y-STD-Ring2', 'GYRO-Z-STD-Ring2', 'ACC-X-STD-Ring3', 'ACC-Y-STD-Ring3', 'ACC-Z-STD-Ring3',
+             'GYRO-X-STD-Ring3', 'GYRO-Y-STD-Ring3', 'GYRO-Z-STD-Ring3'],
+            axis=1, inplace=False)
+        return std_df_3
+
+    def standard_deviation_df():
+        std_df = standard_deviation(grouped.get_group(1).drop(columns="TEST"))
+
+        for group in range(grouped.ngroups - 1):
+            std_df = std_df.append(standard_deviation(grouped.get_group(group + 2).drop(columns="TEST")), ignore_index=True)
+
+        return std_df
+
+    # def mode(data_group):
+    #     mode_df = data_group.mode(axis='columns', numeric_only=True)
+    #     mode_df_2 = mode_df.reset_index(drop=True)
+    #     mode_df_3 = mode_df_2.set_axis(
+    #         ['ACC-X-MODE-Ring1', 'ACC-Y-MODE-Ring1', 'ACC-Z-MODE-Ring1', 'GYRO-X-MODE-Ring1', 'GYRO-Y-MODE-Ring1',
+    #          'GYRO-Z-MODE-Ring1', 'ACC-X-MODE-Ring2', 'ACC-Y-MODE-Ring2', 'ACC-Z-MODE-Ring2', 'GYRO-X-MODE-Ring2',
+    #          'GYRO-Y-MODE-Ring2', 'GYRO-Z-MODE-Ring2', 'ACC-X-MODE-Ring3', 'ACC-Y-MODE-Ring3', 'ACC-Z-MODE-Ring3',
+    #          'GYRO-X-MODE-Ring3', 'GYRO-Y-MODE-Ring3', 'GYRO-Z-MODE-Ring3'],
+    #         axis=1, inplace=False)
+    #
+    #     return mode_df_3
+    #
+    # def mode_df():
+    #     mode_df = mode(grouped.get_group(1).drop(columns="TEST"))
+    #
+    #     for group in range(grouped.ngroups - 1):
+    #         mode_df = mode_df.append(mode(grouped.get_group(group + 2).drop(columns="TEST")), ignore_index=True)
+    #
+    #     return mode_df
 
     def variance(data_group):
         var_df = data_group.var(ddof=0).to_frame().transpose()
@@ -118,7 +173,7 @@ def feature_extraction(data_frame, test_type):
             # max_df = pd.concat()
         return kurt_df
 
-    c_df = min_df().join(max_df()).join(mean_df()).join(variance_df()).join(skewness_df()).join(kurtosis_df())
+    c_df = min_df().join(max_df()).join(median_df()).join(mean_df()).join(standard_deviation_df()).join(variance_df()).join(skewness_df()).join(kurtosis_df())
     c_df.insert(0, 'GESTURE', test_type)
 
     # print(c_df)
