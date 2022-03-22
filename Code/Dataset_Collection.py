@@ -18,9 +18,8 @@ headers = ['ACC-X-Ring1', 'ACC-Y-Ring1', 'ACC-Z-Ring1', 'GYRO-X-Ring1', 'GYRO-Y-
            'ACC-Z-Ring3', 'GYRO-X-Ring3', 'GYRO-Y-Ring3', 'GYRO-Z-Ring3', 'TEST']
 df = pd.DataFrame(columns=headers)
 
-directory = "../DataSet3/right.csv"
-testCounter = 286
-
+directory = "../DataSet3/ignore.csv"
+testCounter = 80
 
 lock = threading.Lock()
 detectionCounter = 0
@@ -226,12 +225,18 @@ def listener(event):
             print("Check reset at GYRO-Z RING3: ", str(detectionCounter))
             inc_test_counter()
 
+    elif event.path == "/Ring1/W":
+        print("W: ", str(event.path), " :", str(event.data))
+        if detectionCounter != 0:
+            print("Counter at W: ", str(detectionCounter))
+            reset_counter()
+            print("Check reset at W: ", str(detectionCounter))
     else:
         print("OTHER: ", str(event.path), " :", str(event.data))
-        if detectionCounter != 0:
-            print("Counter at OTHER: ", str(detectionCounter))
-            reset_counter()
-            print("Check reset at OTHER: ", str(detectionCounter))
+        # if detectionCounter != 0:
+        #     print("Counter at OTHER: ", str(detectionCounter))
+        #     reset_counter()
+        #     print("Check reset at OTHER: ", str(detectionCounter))
 
 
 ring1 = firebase_admin.db.reference('/').listen(listener)
