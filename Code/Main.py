@@ -213,12 +213,25 @@ def listener(event):
             pred = KNN_predict(predictor, fe)
             writeToFB(pred[0], test3)
 
+    elif event.path == "/Ring1/W":
+        print("W: ", str(event.path), " :", str(event.data))
+        if detectionCounter != 0:
+            print("Counter at W: ", str(detectionCounter))
+            reset_counter()
+            print("Check reset at W: ", str(detectionCounter))
     else:
         print("OTHER: ", str(event.path), " :", str(event.data))
-        if detectionCounter != 0:
-            print("Counter at OTHER: ", str(detectionCounter))
-            reset_counter()
-            print("Check reset at OTHER: ", str(detectionCounter))
+        # if detectionCounter != 0:
+        #     print("Counter at OTHER: ", str(detectionCounter))
+        #     reset_counter()
+        #     print("Check reset at OTHER: ", str(detectionCounter))
+
+    # else:
+    #     print("OTHER: ", str(event.path), " :", str(event.data))
+    #     if detectionCounter != 0:
+    #         print("Counter at OTHER: ", str(detectionCounter))
+    #         reset_counter()
+    #         print("Check reset at OTHER: ", str(detectionCounter))
 
 
 ring1 = firebase_admin.db.reference('/').listen(listener)
