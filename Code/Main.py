@@ -46,7 +46,7 @@ def updateTest1(test):
     global test1
     lock.acquire()
     test1 = test
-    print("TEST1", str(test1))
+    # print("TEST1", str(test1))
     lock.release()
 
 
@@ -54,14 +54,14 @@ def updateTest2(test):
     global test2
     lock.acquire()
     test2 = test
-    print("TEST2", str(test2))
+    # print("TEST2", str(test2))
     lock.release()
 
 def updateTest3(test):
     global test3
     lock.acquire()
     test3 = test
-    print("TEST3", str(test3))
+    # print("TEST3", str(test3))
     lock.release()
 
 def writeToFB(value, test):
@@ -174,12 +174,12 @@ def listener(event):
         update_counter()
         print("Check at GYRO-Z RING1: ", str(detectionCounter))
         if detectionCounter == 18 and test1 == test2 and test1 == test3:
-            print(df)
+            # print(df)
             reset_counter()
             print("Check reset at GYRO-Z RING1: ", str(detectionCounter))
             fe = RT_FE(df)
-            print("FEATURE EXTRACTION: ")
-            print(fe)
+            # print("FEATURE EXTRACTION: ")
+            # print(fe)
             pred = KNN_predict(predictor, fe)
             writeToFB(pred[0], test1)
 
@@ -189,12 +189,12 @@ def listener(event):
         update_counter()
         print("Check at GYRO-Z RING2: ", str(detectionCounter))
         if detectionCounter == 18 and test1 == test2 and test1 == test3:
-            print(df)
+            # print(df)
             reset_counter()
             print("Check reset at GYRO-Z RING2: ", str(detectionCounter))
             fe = RT_FE(df)
-            print("FEATURE EXTRACTION: ")
-            print(fe)
+            # print("FEATURE EXTRACTION: ")
+            # print(fe)
             pred = KNN_predict(predictor, fe)
             writeToFB(pred[0], test2)
 
@@ -204,27 +204,28 @@ def listener(event):
         update_counter()
         print("Check at GYRO-Z RING3: ", str(detectionCounter))
         if detectionCounter == 18 and test1 == test2 and test1 == test3:
-            print(df)
+            # print(df)
             reset_counter()
             print("Check reset at GYRO-Z RING3: ", str(detectionCounter))
             fe = RT_FE(df)
-            print("FEATURE EXTRACTION: ")
-            print(fe)
+            # print("FEATURE EXTRACTION: ")
+            # print(fe)
             pred = KNN_predict(predictor, fe)
             writeToFB(pred[0], test3)
 
     elif event.path == "/Ring1/W":
-        print("W: ", str(event.path), " :", str(event.data))
+        # print("W: ", str(event.path), " :", str(event.data))
         if detectionCounter != 0:
-            print("Counter at W: ", str(detectionCounter))
+            # print("Counter at W: ", str(detectionCounter))
             reset_counter()
-            print("Check reset at W: ", str(detectionCounter))
+            print("Check reset at new gesture: ", str(detectionCounter))
     else:
-        print("OTHER: ", str(event.path), " :", str(event.data))
+        # print("OTHER: ", str(event.path), " :", str(event.data))
         # if detectionCounter != 0:
         #     print("Counter at OTHER: ", str(detectionCounter))
         #     reset_counter()
         #     print("Check reset at OTHER: ", str(detectionCounter))
+        print("")
 
     # else:
     #     print("OTHER: ", str(event.path), " :", str(event.data))

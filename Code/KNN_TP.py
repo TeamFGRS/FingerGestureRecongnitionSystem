@@ -35,6 +35,8 @@ def KNN_train():
 def KNN_predict(predictor, df):
     # Z = df.drop(columns='GESTURE')
     motion = predictor.predict(df)
-    print("Best predictions Grid search:")
+    # print("Best predictions Grid search:")
+    print("\n*** PREDICTION ***")
     print(predictor.predict(df))
+    print("******************\n")
     return motion
