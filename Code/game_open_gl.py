@@ -390,12 +390,12 @@ if __name__ == "__main__":
         elif gesture == "snap":
             changeCount = changeCount + 1
             print("GESTURE ", gesture)
-        # elif gesture == "pinch_in":
-        #     glTranslatef(0, 0, 1)
-        #     print("GESTURE ", gesture)
-        # elif gesture == "pinch_out":
-        #     glTranslatef(0, 0, -1)
-        #     print("GESTURE ", gesture)
+        elif gesture == "pinch_in":
+            glTranslatef(0, 0, 1)
+            print("GESTURE ", gesture)
+        elif gesture == "pinch_out":
+            glTranslatef(0, 0, -1)
+            print("GESTURE ", gesture)
         elif gesture == "ignore":
             print("GESTURE ", gesture)
         gesture = ""
