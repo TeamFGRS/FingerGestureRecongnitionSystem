@@ -378,12 +378,10 @@ if __name__ == "__main__":
             angle += 30
             glRotatef(30, 0, 0, -1)  # only x
             print("GESTURE ", gesture)
-            print("angle ", angle)
         elif gesture == "counter":
             angle -= 30
             glRotatef(30, 0, 0, 1)  # only x
             print("GESTURE ", gesture)
-            print("angle ", angle)
 
         if angle == 360 or angle == -360:
             angle = 0
