@@ -52,28 +52,6 @@ def listener(event):
 
 gesture_listener = firebase_admin.db.reference('/Prediction').listen(listener)
 
-# a cube has 8 verticies
-# verticies_cube = (
-#     # (1, -1, -1),  # coordinates of node 0
-#     # (1, 1, -1),
-#     # (-1, 1, -1),
-#     # (-1, -1, -1),
-#     # (1, -1, 1),
-#     # (1, 1, 1),
-#     # (-1, -1, 1),
-#     # (-1, 1, 1),
-#
-#     #VERTICES FOR SOLID CUBE WITH DIFFERENT COLOURS ON EACH PHASE
-#     (1, 1, 1),
-#     (1, -1, 1),
-#     (-1, -1, 1),
-#     (-1, 1, 1),
-#     (1, 1, -1),
-#     (1, -1, -1),
-#     (-1, -1, -1),
-#     (-1, 1, -1),
-#
-# )
 
 verticies_triangle = (
     (-1, 0, 1),
@@ -82,23 +60,6 @@ verticies_triangle = (
     (0, 3, 0),
 )
 
-# NOT NEEDED FOR NEW CUBE
-# edges_cube = (
-#
-#     (0, 1),  # node 0 connected to node 1
-#     (0, 3),
-#     (0, 4),
-#     (2, 1),
-#     (2, 3),
-#     (2, 7),
-#     (6, 3),
-#     (6, 4),
-#     (6, 7),
-#     (5, 1),
-#     (5, 4),
-#     (5, 7),
-#
-# )
 
 edges_triangle = (
 
@@ -111,23 +72,6 @@ edges_triangle = (
 
 )
 
-# surfaces of the cube
-# surfaces = (
-#     # (0, 1, 2, 3),  # surface connecting node 0,1,2,3
-#     # (3, 2, 7, 6),
-#     # (6, 7, 5, 4),
-#     # (4, 5, 1, 0),
-#     # (1, 5, 7, 2),
-#     # (4, 0, 3, 6),
-#
-#     #SURFACES FOR SOLID CUBE WITH DIFFERENT COLOURS ON EACH PHASE
-#     (0, 1, 2, 3),
-#     (4, 5, 1, 0),
-#     (0, 1, 5, 4),
-#     (3, 2, 6, 7),
-#     (0, 3, 7, 4),
-#     (1, 2, 6, 5),
-# )
 
 surfaces_triangle = (
     (0, 1, 2),  # surface connecting node 0,1,2
@@ -257,32 +201,6 @@ def Cube():
 
     glEnd()
 
-    # NOT NEEDED F0R NEW NEW CUBE
-    # x = 0
-    # for surface in surfaces:
-    #     #x = 0
-    #     x += 1
-    #     #glColor3fv(colors[x])
-    #     for vertex in surface:
-    #
-    #         # for original colour matrix
-    #         # x += 2
-    #         #
-    #         # # for green/red matrix
-    #         # x += 1
-    #         #glDisable(GL_CULL_FACE)
-    #         glColor3fv(colors[x])  # colour, rgb
-    #         glVertex3fv(verticies_cube[vertex])
-    # NOT NEEDED FOR NEW CUBE
-    # glBegin(GL_LINES)  # here we notify opengl what kindof graphics we are putting here (consant)
-
-    # for edge in edges_cube:
-    #     x += 1
-    #     glColor3fv(colors[x])
-    #     for vertex in edge:
-    #         glVertex3fv(verticies_cube[vertex])  # basically drawing the vertices and connecting them
-    # glEnd()  # this one stays empty
-
 
 def Triangle():
     glBegin(GL_TRIANGLES)
@@ -318,20 +236,6 @@ def Triangle():
     glVertex3f(1.0, 0.0, 0.0)
     glVertex3f(0.0, 3.0, 0.0)
 
-    # for surface in surfaces_triangle:
-    #     x = 0
-    #     for vertex in surface:
-    #         x += 1
-    #         glColor3fv(colors[x])  # colour, rgb
-    #         glVertex3fv(verticies_triangle[vertex])
-    #
-    # glEnd()
-    #
-    # glBegin(GL_LINES)
-    # for edge in edges_triangle:
-    #     for vertex in edge:
-    #         glVertex3fv(verticies_triangle[vertex])
-
     glEnd()
 
 
@@ -340,6 +244,15 @@ if __name__ == "__main__":
     global changeCount
     global currentShape
     global currentMatrix
+
+    # variable for clockwise
+    global clockX
+    clockX = 0
+
+    # variable for counter
+    global counterClockX
+    counterClockX = 0
+
 
     # REMOVED THESE WHEN CHANGED FROM main() TO "__main__"
     # lock = threading.Lock()
@@ -372,41 +285,129 @@ if __name__ == "__main__":
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_r:
                     resetShape()
+                    counterClockX = 0
+                    clockX = 0
 
         if gesture == "up":
-            glTranslatef(0, 1, 0)
-            print("GESTUTRE ", gesture)
+            if clockX == 0 & counterClockX == 0:
+                glTranslatef(0, 1, 0)
+                print("GESTURE ", gesture)
+
+                # If it was Clockwise
+            elif clockX != 0 & clockX % 30 == 0:
+                print("------------------------TEST CLOCK--------------------------")
+                glRotatef(clockX, 0, 0, 1)  # turns it counter
+                glTranslatef(0, 1, 0)  # up
+                glRotatef(clockX, 0, 0, -1)  # turns it back to clockwise
+                print("GESTURE ", gesture)
+
+           # elif counterX == 30 | counterX == 60 | counterX == 90 | counterX == 120:
+            # If it was Counter
+            elif counterClockX != 0 & counterClockX % 30 == 0:
+                print("------------------------TEST COUNTER--------------------------")
+                glRotatef(counterClockX, 0, 0, -1)   # turns it clockwise
+                glTranslatef(0, 1, 0)   # up
+                glRotatef(counterClockX, 0, 0, +1)    # turns it back to counter
+                print("GESTURE ", gesture)
+
+
+
+
         elif gesture == "down":
-            glTranslatef(0, -1, 0)
-            print("GESTUTRE ", gesture)
+            if clockX == 0 & counterClockX == 0:
+                glTranslatef(0, -1, 0)
+                print("GESTURE ", gesture)
+
+                # elif counterX == 30 | counterX == 60 | counterX == 90 | counterX == 120:
+            elif counterClockX != 0 & counterClockX % 30 == 0:
+                glRotatef(counterClockX, 0, 0, -1)  # turns it clockwise
+                glTranslatef(0, -1, 0)  # Down
+                glRotatef(counterClockX, 0, 0, 1)  # turns it back to counter
+                print("GESTURE ", gesture)
+
+                # elif clockX == 30:
+            elif clockX != 0 & clockX % 30 == 0:
+                glRotatef(clockX, 0, 0, 1)  # turns it counter
+                glTranslatef(0, -1, 0)  # Down
+                glRotatef(clockX, 0, 0, -1)  # turns it back to clockwise
+                print("GESTURE ", gesture)
+
+
         elif gesture == "left":
-            glTranslatef(-1, 0, 0)
-            print("GESTUTRE ", gesture)
+            if clockX == 0 & counterClockX == 0:
+                glTranslatef(-1, 0, 0)
+                print("GESTURE ", gesture)
+
+                # elif counterX == 30 | counterX == 60 | counterX == 90 | counterX == 120:
+            elif counterClockX != 0 & counterClockX % 30 == 0:
+                glRotatef(counterClockX, 0, 0, -1)  # turns it clockwise
+                glTranslatef(-1, 0, 0)  # Left
+                glRotatef(counterClockX, 0, 0, 1)  # turns it back to counter
+                print("GESTURE ", gesture)
+
+                # elif clockX == 30:
+            elif clockX != 0 & clockX % 30 == 0:
+                glRotatef(clockX, 0, 0, 1)  # turns it counter
+                glTranslatef(-1, 0, 0)  # Left
+                glRotatef(clockX, 0, 0, -1)  # turns it back to clockwise
+                print("GESTURE ", gesture)
+
+
         elif gesture == "right":
-            glTranslatef(1, 0, 0)
-            print("GESTUTRE ", gesture)
+            if clockX == 0 & counterClockX == 0:
+                glTranslatef(1, 0, 0)
+                print("GESTURE ", gesture)
+
+            elif counterClockX != 0 & counterClockX % 30 == 0:
+                glRotatef(counterX, 0, 0, -1)  # turns it clockwise
+                glTranslatef(1, 0, 0)  # Right
+                glRotatef(counterX, 0, 0, 1)  # turns it back to counter
+                print("GESTURE ", gesture)
+
+                # elif clockX == 30:
+            elif clockX != 0 & clockX % 30 == 0:
+                glRotatef(clockX, 0, 0, 1)  # turns it counter
+                glTranslatef(1, 0, 0)  # Right
+                glRotatef(clockX, 0, 0, -1)  # turns it back to clockwise
+                print("GESTURE ", gesture)
+
+
         elif gesture == "clock":
+            clockX += 30
+            if counterClockX > 0:
+                #counterClockX -= 30
+                counterClockX = 0
             # glRotatef(25, -1, -1, -1) #all axis
             # glRotatef(30, 0, -1, 0)  # only y
             glRotatef(30, 0, 0, -1)  # only x
             # glRotatef(30, 0, -1, 0)  # only y
-            print("GESTUTRE ", gesture)
+            print("GESTURE ", gesture)
+
         elif gesture == "counter":
+            counterClockX += 30
+            if clockX > 0:
+                #clockX -= 30
+                clockX = 0
             # glRotatef(25, 1, 1, 1) #all axis
             glRotatef(30, 0, 0, 1)  # only x
             # glRotatef(30, 0, 1, 0)  # only y
-            print("GESTUTRE ", gesture)
+            print("GESTURE ", gesture)
+
+        elif gesture == "reset":
+            resetShape()
+            counterClockX = 0
+            clockX = 0
 
         # FOR WHEN WE HAVE ALL GESTURES
         elif gesture == "snap":
             changeCount = changeCount + 1
-            print("GESTUTRE ", gesture)
+            print("GESTURE ", gesture)
         elif gesture == "pinch_in":
             glTranslatef(0, 1.0, 1.0)
-            print("GESTUTRE ", gesture)
+            print("GESTURE ", gesture)
         elif gesture == "pinch_out":
             glTranslatef(0, 0, -1.0)
-            print("GESTUTRE ", gesture)
+            print("GESTURE ", gesture)
         gesture = ""
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
