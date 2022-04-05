@@ -18,8 +18,8 @@ headers = ['ACC-X-Ring1', 'ACC-Y-Ring1', 'ACC-Z-Ring1', 'GYRO-X-Ring1', 'GYRO-Y-
            'ACC-Z-Ring3', 'GYRO-X-Ring3', 'GYRO-Y-Ring3', 'GYRO-Z-Ring3', 'TEST']
 df = pd.DataFrame(columns=headers)
 
-directory = "../DataSet3/snap.csv"
-testCounter = 410
+directory = "../DataSet3/reset.csv"
+testCounter = 247
 
 lock = threading.Lock()
 detectionCounter = 0

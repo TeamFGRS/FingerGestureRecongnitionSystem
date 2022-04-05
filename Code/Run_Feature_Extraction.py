@@ -25,6 +25,8 @@ fingerSnap = read_file('../DataSet3/snap.csv')
 # fingerPOut = read_file('../DataSet3/pinch_out.csv')
 # ignore data frame
 fingerIgnore = read_file('../DataSet3/ignore.csv')
+# reset data frame
+fingerReset = read_file('../DataSet3/reset.csv')
 
 
 # run feature extraction
@@ -38,13 +40,14 @@ snap_df = feature_extraction(fingerSnap, "snap")
 # pin_df = feature_extraction(fingerPIn, "pinch_in")
 # pout_df = feature_extraction(fingerPOut, "pinch_out")
 ignore_df = feature_extraction(fingerIgnore, "ignore")
+reset_df = feature_extraction(fingerReset, "reset")
 
 
 # # merge features into one data frame
 # f_df = dataframe_merging(up_df, down_df, right_df, left_df, clock_df, counter_df, snap_df, pin_df, pout_df)
 
 # merge features into one data frame
-f_df = dataframe_merging(up_df, down_df, right_df, left_df, clock_df, counter_df, snap_df, ignore_df)
+f_df = dataframe_merging(up_df, down_df, right_df, left_df, clock_df, counter_df, snap_df, ignore_df, reset_df)
 
 # store into file
 df_to_csv(f_df, "../DataSet3/extracted_features.csv")
