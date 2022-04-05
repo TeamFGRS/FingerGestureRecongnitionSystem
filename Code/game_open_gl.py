@@ -397,6 +397,7 @@ if __name__ == "__main__":
             resetShape()
             counterClockX = 0
             clockX = 0
+            print("GESTURE ", gesture)
 
         # FOR WHEN WE HAVE ALL GESTURES
         elif gesture == "snap":
