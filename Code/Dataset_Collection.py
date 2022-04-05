@@ -19,7 +19,7 @@ headers = ['ACC-X-Ring1', 'ACC-Y-Ring1', 'ACC-Z-Ring1', 'GYRO-X-Ring1', 'GYRO-Y-
 df = pd.DataFrame(columns=headers)
 
 directory = "../DataSet3/reset.csv"
-testCounter = 98
+testCounter = 247
 
 lock = threading.Lock()
 detectionCounter = 0
