@@ -383,9 +383,6 @@ if __name__ == "__main__":
             glRotatef(30, 0, 0, 1)  # only x
             print("GESTURE ", gesture)
 
-        if angle == 360 or angle == -360:
-            angle = 0
-
         # FOR WHEN WE HAVE ALL GESTURES
         elif gesture == "snap":
             changeCount = changeCount + 1
@@ -398,7 +395,21 @@ if __name__ == "__main__":
         #     print("GESTURE ", gesture)
         elif gesture == "ignore":
             print("GESTURE ", gesture)
+        elif gesture == "reset":
+            resetShape()
+            counterClockX = 0
+            clockX = 0
+            print("ANGLE Before: ", angle)
+            angle = 0
+            print("ANGLE After: ", angle)
+            print("GESTURE ", gesture)
+
+        if angle == 360 or angle == -360:
+            angle = 0
+
         gesture = ""
+
+
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
